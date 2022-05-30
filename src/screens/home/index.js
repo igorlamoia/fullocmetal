@@ -1,55 +1,112 @@
-import React, { useEffect, useState } from 'react';
-import { api } from '../../utils/api';
-import { Title, Wrapper, Button, Container } from './styles';
-import { getDatabase, ref, onValue, set, get, child } from 'firebase/database';
-import { FlatList } from 'react-native';
-export function Home({ navigation: { navigate } }) {
-	const [cars, setCars] = useState([]);
-	async function getDados() {
+import React, { useState, useEffect } from 'react';
+import { RFValue } from 'react-native-responsive-fontsize';
+import { Container, Header, TotalCars, HeaderContent, FlatCars } from './styles';
+import Logo from '../../assets/logo.svg';
+import { Car } from '../../components/Car';
+import { useNavigation } from '@react-navigation/native';
+import api from '../../services/api';
+import { Alert } from 'react-native';
+import { Spinner } from '../../components/Spinner';
+import { FloatingButton } from '../../components/FloatingButton/index.js';
+
+// const data = [
+// 	{
+// 		id: '1',
+// 		brand: 'Panamera',
+// 		name: 'Porche',
+// 		rent: {
+// 			period: 'AO DIA',
+// 			price: 120,
+// 		},
+// 		thumbnail: 'https://www.pngplay.com/wp-content/uploads/13/Porsche-Panamera-PNG-Images-HD.png',
+// 	},
+// 	{
+// 		id: '2',
+// 		brand: 'Panamera',
+// 		name: 'Porche AXu 5670',
+// 		rent: {
+// 			period: 'AO DIA',
+// 			price: 120,
+// 		},
+// 		thumbnail: 'https://www.pngplay.com/wp-content/uploads/13/Porsche-Panamera-PNG-Images-HD.png',
+// 	},
+// 	{
+// 		id: '3',
+// 		brand: 'Panamera',
+// 		name: 'Porche AXu 5670',
+// 		rent: {
+// 			period: 'AO DIA',
+// 			price: 120,
+// 		},
+// 		thumbnail: 'https://www.pngplay.com/wp-content/uploads/13/Porsche-Panamera-PNG-Images-HD.png',
+// 	},
+// 	{
+// 		id: '4',
+// 		brand: 'Panamera',
+// 		name: 'Porche AXu 5670',
+// 		rent: {
+// 			period: 'AO DIA',
+// 			price: 120,
+// 		},
+// 		thumbnail: 'https://www.pngplay.com/wp-content/uploads/13/Porsche-Panamera-PNG-Images-HD.png',
+// 	},
+// 	{
+// 		id: '5',
+// 		brand: 'Panamera',
+// 		name: 'Porche AXu 5670',
+// 		rent: {
+// 			period: 'AO DIA',
+// 			price: 120,
+// 		},
+// 		thumbnail: 'https://www.pngplay.com/wp-content/uploads/13/Porsche-Panamera-PNG-Images-HD.png',
+// 	},
+// ];
+
+export const Home = () => {
+	const navigation = useNavigation();
+	const [data, setData] = useState([]);
+	const [isLoading, setIsLoading] = useState(false);
+
+	const fetchData = async () => {
 		try {
-			const { data } = await api.get('01001000/json/');
-			console.log(data);
-		} catch (erro) {
-			console.log(erro);
+			setIsLoading(true);
+			const { data: cars } = await api.get('/cars');
+			setData(cars);
+		} catch (error) {
+			console.log('Olha o erro:', error);
+			Alert.alert('Ops...');
+		} finally {
+			setIsLoading(false);
 		}
-	}
+	};
 
 	useEffect(() => {
-		// getDados();
+		fetchData();
 	}, []);
 
-	async function handleTeste() {
-		const dbRef = ref(getDatabase());
-		get(child(dbRef, 'cars/'))
-			.then((snapshot) => {
-				if (snapshot.exists()) {
-					setCars(snapshot.val());
-				} else {
-					console.log('No data available');
-				}
-			})
-			.catch((error) => {
-				console.error(error);
-			});
-	}
+	const handleCar = (car) => {
+		navigation.navigate('Details', { car });
+	};
+
+	const handleMyRents = () => {
+		navigation.navigate('UserRents');
+	};
 
 	return (
-		<>
-			<Wrapper>
-				<Title>Hello World!</Title>
-			</Wrapper>
-			{/* <Button onPress={() => navigate('ScheduleCompleted')}> */}
-			<Button onPress={handleTeste}>
-				<Title>Ir para Schedule</Title>
-			</Button>
-			<FlatList
-				data={cars}
-				renderItem={({ item }) => (
-					<Container>
-						<Title>{item.brand}</Title>
-					</Container>
-				)}
+		<Container>
+			<Header>
+				<HeaderContent>
+					<Logo width={RFValue(113)} height={RFValue(113)} />
+					<TotalCars>Total de carros: {data?.length}</TotalCars>
+				</HeaderContent>
+			</Header>
+			{isLoading && <Spinner />}
+			<FlatCars
+				data={data}
+				renderItem={({ item }) => <Car onPress={() => handleCar(item)} data={item} />}
+				keyExtractor={(item) => item.id}
 			/>
-		</>
+			<FloatingButton onPress={handleMyRents} />
+		</Container>
 	);
-}
+};

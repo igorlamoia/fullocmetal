@@ -11,8 +11,8 @@ export default {
 
 		line: '#ebebf0',
 
-		primary: '#dc1637',
-		primary_light: '#fdedef',
+		main: '#dc1637',
+		main_light: '#fdedef',
 
 		success: '#03b252',
 
