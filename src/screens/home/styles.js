@@ -4,8 +4,13 @@ export const Title = styled.Text`
 	/* font-size: 1.5e; */
 	/* margin-top: 200px; */
 	text-align: center;
-	color: white;
-	`;
+	color: black;
+`;
+export const Container = styled.View`
+	background-color: green;
+	justify-content: center;
+	align-items: center;
+`;
 export const Wrapper = styled.View`
 	/* margin-top: 200px; */
 	padding-top: 200px;
