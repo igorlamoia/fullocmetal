@@ -1,6 +1,6 @@
-// import { getDatabase } from 'firebase/database';
-// import { initializeApp } from 'firebase/app';
-import * as firebase from 'firebase';
+import { getDatabase } from 'firebase/database';
+import { initializeApp } from 'firebase/app';
+// import * as firebase from 'firebase';
 
 const { apiKey } = process.env;
 const { authDomain } = process.env;
@@ -23,11 +23,10 @@ const firebaseConfig = {
 	appId: appId,
 };
 
-export default 
-// const app = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 // Get a reference to the database service
-// const database = getDatabase(app);
+export const db = getDatabase(app);
 // Initialize Firebase
-export default !firebase?.apps?.length ? firebase.initializeApp(firebaseConfig) : firebase.app();
+// export default !firebase?.apps?.length ? firebase.initializeApp(firebaseConfig) : firebase.app();
 // Get a reference to the database service
 // export const db = getDatabase(app);
