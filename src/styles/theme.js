@@ -1,7 +1,8 @@
 export default {
 	colors: {
 		header: '#1b1b1f',
-
+		background_metal: '#6A6A6C',
+		text_metal_logo: '#D7D8DD',
 		background_primary: '#f4f5f6',
 		background_secondary: '#ffff',
 

@@ -8,7 +8,7 @@ import api from '../../services/api';
 import { Alert } from 'react-native';
 import { Spinner } from '../../components/Spinner';
 import { FloatingButton } from '../../components/FloatingButton/index.js';
-import { getDatabase, ref, child, get } from 'firebase/database';
+import { getDatabase, ref, child, get, onValue } from 'firebase/database';
 // import firebase from '../../config/config';
 import { db } from '../../config/config';
 
@@ -73,21 +73,15 @@ export const Home = () => {
 	const fetchData = async () => {
 		try {
 			setIsLoading(true);
-			const dbRef = ref(db);
-			get(child(dbRef, 'cars'))
-				.then((snapshot) => {
-					if (snapshot.exists()) {
-						console.log(snapshot.val());
-						setData(snapshot.val());
-					} else {
-						console.log('No data available');
-					}
-				})
-				.catch((error) => {
-					console.error(error);
-				});
-
-			setData(cars);
+			// const dbRef = ref(db);
+			onValue(ref(db, 'cars'), (snapshot) => {
+				if (snapshot.exists()) {
+					console.log(snapshot.val());
+					setData(snapshot.val());
+				} else {
+					console.log('No data available');
+				}
+			});
 		} catch (error) {
 			console.log('Olha o erro:', error);
 			Alert.alert('Ops...');
