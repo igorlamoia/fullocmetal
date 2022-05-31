@@ -19,12 +19,15 @@ export const Header = styled.View`
 
 	background-color: ${({ theme }) => theme.colors.header};
 
-	justify-content: space-between;
-	justify-content: flex-end;
-	padding: 0px 24px;
+	justify-content: center;
+	/* flex-direction: row; */
+	/* align-items: space-between; */
+	/* justify-content: flex-end; */
+	padding: 30px 20px;
 `;
 
 export const HeaderContent = styled.View`
+	/* background-color: red; */
 	flex-direction: row;
 	justify-content: space-between;
 	align-items: center;

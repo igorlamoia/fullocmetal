@@ -292,10 +292,8 @@
     {
       "id": "52930821-cbea-4b05-9f45-7c02b1bb0d8c",
       "unavailable_dates": [
-        "2022-04-19",
-        "2022-04-20",
-        "2022-04-21",
-        "2022-04-22"
+        "2022-06-02",
+        "2022-06-03"
       ]
     },
     {
@@ -374,55 +372,6 @@
     {
       "user_id": 1,
       "car": {
-        "id": "535e8de8-721b-4bac-8b72-7d29be7da467",
-        "brand": "Audi",
-        "name": "RS 5 Coupé",
-        "about": "O carro ainda tem sistema de tração nas quatro rodas Quattro com diferencial traseiro esportivo de série. De acordo com a Audi, ele faz o mesmo em 3,8 segundos na Sportback.",
-        "rent": {
-          "period": "Ao dia",
-          "price": 120
-        },
-        "fuel_type": "electric",
-        "thumbnail": "https://storage.googleapis.com/golden-wind/ignite/react-native/thumbnails/1.png",
-        "accessories": [
-          {
-            "type": "speed",
-            "name": "250km/h"
-          },
-          {
-            "type": "acceleration",
-            "name": "3.8s"
-          },
-          {
-            "type": "turning_diameter",
-            "name": "800 HP"
-          },
-          {
-            "type": "electric_motor",
-            "name": "Elétrico"
-          },
-          {
-            "type": "exchange",
-            "name": "Auto"
-          },
-          {
-            "type": "seats",
-            "name": "5 pessoas"
-          }
-        ],
-        "photos": [
-          "https://storage.googleapis.com/golden-wind/ignite/react-native/images/1.png",
-          "https://storage.googleapis.com/golden-wind/ignite/react-native/images/2.png",
-          "https://storage.googleapis.com/golden-wind/ignite/react-native/images/3.png"
-        ]
-      },
-      "startDate": "01/06/2022",
-      "endDate": "03/06/2022",
-      "id": 2
-    },
-    {
-      "user_id": 1,
-      "car": {
         "id": "ffb71f55-818a-48b1-b7d2-2efc406ede25",
         "brand": "Porsche",
         "name": "Panamera",
@@ -466,37 +415,37 @@
       },
       "startDate": "01/06/2022",
       "endDate": "10/06/2022",
-      "id": 3
+      "id": 2
     },
     {
       "user_id": 1,
       "car": {
-        "id": "535e8de8-721b-4bac-8b72-7d29be7da467",
-        "brand": "Audi",
-        "name": "RS 5 Coupé",
-        "about": "O carro ainda tem sistema de tração nas quatro rodas Quattro com diferencial traseiro esportivo de série. De acordo com a Audi, ele faz o mesmo em 3,8 segundos na Sportback.",
+        "id": "52930821-cbea-4b05-9f45-7c02b1bb0d8c",
+        "brand": "Chevrolet",
+        "name": "Corvette Z06",
+        "about": "O Chevrolet Corvette Z06 inclui freios Brembo de alto desempenho com pinças maiores no conjunto dianteiro, itens aerodinâmicos com capô de fibra de carbono, suspensão para alto desempenho.",
         "rent": {
           "period": "Ao dia",
-          "price": 120
+          "price": 620
         },
-        "fuel_type": "electric",
-        "thumbnail": "https://storage.googleapis.com/golden-wind/ignite/react-native/thumbnails/1.png",
+        "fuel_type": "gasoline_motor",
+        "thumbnail": "https://storage.googleapis.com/golden-wind/ignite/react-native/thumbnails/3.png",
         "accessories": [
           {
             "type": "speed",
-            "name": "250km/h"
+            "name": "330km/h"
           },
           {
             "type": "acceleration",
-            "name": "3.8s"
+            "name": "6.2s"
           },
           {
             "type": "turning_diameter",
-            "name": "800 HP"
+            "name": "900 HP"
           },
           {
-            "type": "electric_motor",
-            "name": "Elétrico"
+            "type": "gasoline_motor",
+            "name": "Gasoline"
           },
           {
             "type": "exchange",
@@ -504,18 +453,18 @@
           },
           {
             "type": "seats",
-            "name": "5 pessoas"
+            "name": "2 pessoas"
           }
         ],
         "photos": [
-          "https://storage.googleapis.com/golden-wind/ignite/react-native/images/1.png",
-          "https://storage.googleapis.com/golden-wind/ignite/react-native/images/2.png",
-          "https://storage.googleapis.com/golden-wind/ignite/react-native/images/3.png"
+          "https://storage.googleapis.com/golden-wind/ignite/react-native/images/6.png",
+          "https://storage.googleapis.com/golden-wind/ignite/react-native/images/7.png",
+          "https://storage.googleapis.com/golden-wind/ignite/react-native/images/8.png"
         ]
       },
-      "startDate": "01/06/2022",
-      "endDate": "10/06/2022",
-      "id": 4
+      "startDate": "02/06/2022",
+      "endDate": "03/06/2022",
+      "id": 3
     }
   ]
 }

@@ -96,7 +96,7 @@ export const Home = () => {
 		<Container>
 			<Header>
 				<HeaderContent>
-					<Logo width={RFValue(113)} height={RFValue(113)} />
+					<Logo width={RFValue(100)} height={RFValue(100)} />
 					<TotalCars>Total de carros: {data?.length}</TotalCars>
 				</HeaderContent>
 			</Header>
