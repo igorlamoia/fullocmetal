@@ -93,23 +93,15 @@ export const UserRents = () => {
 		try {
 			setIsLoading(true);
 			const dbRef = ref(db);
-			get(child(dbRef, 'schedules_byuser/' + 'userTester'))
-				.then((snapshot) => {
-					if (snapshot.exists()) {
-						const reservas = snapshot.val();
-						const arrayReservedCars = Object.values(reservas).map((reserva) => reserva);
-						// console.log(arrayReservedCars);
-						setRentedCars(arrayReservedCars);
-					} else {
-						setRentedCars([]);
-						console.log('No data available');
-					}
-				})
-				.catch((error) => {
-					console.error(error);
-				});
-			// const { data } = await api.get(`schedules_byuser?user_id=1`);
-			// setRentedCars(data);
+			const snapshot = await get(child(dbRef, 'schedules_byuser/' + 'userTester'));
+			if (snapshot.exists()) {
+				const reservas = snapshot.val();
+				const arrayReservedCars = Object.values(reservas).map((reserva) => reserva);
+				// console.log(arrayReservedCars);
+				setRentedCars(arrayReservedCars);
+			} else {
+				setRentedCars([]);
+			}
 		} catch (error) {
 			Alert.alert('Ops...', 'Algo de errado aconteceu');
 		} finally {
