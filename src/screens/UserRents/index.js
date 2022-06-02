@@ -21,7 +21,10 @@ import { useNavigation } from '@react-navigation/native';
 import { BackButton } from '../../components/BackButton';
 import { Car } from '../../components/Car';
 import SvgArrow from '../../assets/arrow.svg';
-import api from '../../services/api';
+// import api from '../../services/api';
+import { getDatabase, ref, child, get, onValue } from 'firebase/database';
+// import firebase from '../../config/config';
+import { db } from '../../config/config';
 import { Spinner } from '../../components/Spinner';
 
 // const data: CarData[] = [
@@ -90,8 +93,16 @@ export const UserRents = () => {
 	const getRentedCarsFromUser = async () => {
 		try {
 			setIsLoading(true);
-			const { data } = await api.get(`schedules_byuser?user_id=1`);
-			setRentedCars(data);
+			onValue(ref(db, 'schedules_byuser'), (snapshot) => {
+				if (snapshot.exists()) {
+					console.log(snapshot.val());
+					setRentedCars(snapshot.val());
+				} else {
+					console.log('No data available');
+				}
+			});
+			// const { data } = await api.get(`schedules_byuser?user_id=1`);
+			// setRentedCars(data);
 		} catch (error) {
 			Alert.alert('Ops...', 'Algo de errado aconteceu');
 		} finally {

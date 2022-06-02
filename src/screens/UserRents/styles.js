@@ -10,6 +10,7 @@ export const Container = styled.View`
 `;
 export const Header = styled.View`
 	width: 100%;
+	justify-content: space-between;
 	height: ${RFValue(325)}px;
 	background-color: ${({ theme }) => theme.colors.header};
 	padding: ${getStatusBarHeight() + RFValue(80)}px 25px 32px;

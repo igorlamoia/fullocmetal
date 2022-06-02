@@ -76,7 +76,6 @@ export const Home = () => {
 			// const dbRef = ref(db);
 			onValue(ref(db, 'cars'), (snapshot) => {
 				if (snapshot.exists()) {
-					console.log(snapshot.val());
 					setData(snapshot.val());
 				} else {
 					console.log('No data available');
