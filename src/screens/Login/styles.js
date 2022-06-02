@@ -11,15 +11,19 @@ export const Content = styled.View`
 	align-items: center;
 	width: 100%;
 	height: 70%;
+	padding: 5%;
 	background-color: ${({ theme }) => theme.colors.header};
 `;
 export const Title = styled.Text`
+	font-family: ${({ theme }) => theme.fonts.secondary_500};
 	color: ${({ theme }) => theme.colors.text_metal_logo};
 	font-size: ${RFValue(25)}px;
 	text-align: center;
+	/* margin-top: -50px; */
 `;
 
 export const Description = styled(Title)`
+	font-family: ${({ theme }) => theme.fonts.secondary_400};
 	font-size: ${RFValue(14)}px;
 `;
 

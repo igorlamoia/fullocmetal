@@ -1,13 +1,14 @@
 import React from 'react';
 
-import { Container, Title } from './styles';
-import Logo from '../../assets/logo.svg';
+import { Container, Title, LogoWrapper } from './styles';
 
-const LoginButton = ({ ...rest }) => {
+const LoginButton = ({ svg: Svg, title, ...rest }) => {
 	return (
 		<Container {...rest}>
-			<Logo />
-			<Title>Entrar com Google</Title>
+			<LogoWrapper>
+				<Svg />
+			</LogoWrapper>
+			<Title>{title}</Title>
 		</Container>
 	);
 };

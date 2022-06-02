@@ -12,7 +12,6 @@ import { Archivo_400Regular, Archivo_500Medium, Archivo_600SemiBold } from '@exp
 import { ThemeProvider } from 'styled-components';
 import { Routes } from './src/routes';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import Login from './src/screens/Login';
 
 export default function App() {
 	let [fontsLoaded] = useFonts({
@@ -31,8 +30,7 @@ export default function App() {
 			<ThemeProvider theme={theme}>
 				<StatusBar barStyle="light-content" translucent backgroundColor="transparent" />
 				<GestureHandlerRootView style={{ flex: 1 }}>
-					{/* <Routes /> */}
-					<Login />
+					<Routes />
 				</GestureHandlerRootView>
 			</ThemeProvider>
 		</>

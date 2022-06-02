@@ -6,6 +6,7 @@ import { RentDate } from '../screens/RentDate';
 import { RentDetailsScreen } from '../screens/RentDetails';
 import { RentComplete } from '../screens/RentComplete';
 import { UserRents } from '../screens/UserRents';
+import Login from '../screens/Login';
 
 const { Navigator, Screen } = createNativeStackNavigator();
 
@@ -16,6 +17,7 @@ export const StackRoutes = () => {
 				headerShown: false,
 			}}
 		>
+			<Screen name="Login" component={Login} />
 			<Screen name="Home" component={Home} />
 			<Screen name="Details" component={Details} />
 			<Screen name="RentDate" component={RentDate} />

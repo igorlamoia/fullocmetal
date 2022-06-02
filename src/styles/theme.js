@@ -5,7 +5,7 @@ export default {
 		text_metal_logo: '#D7D8DD',
 		background_primary: '#f4f5f6',
 		background_secondary: '#ffff',
-
+		border_login: '#F0F2F5',
 		text: '#7a7a80',
 		text_detail: '#AEAEB3',
 		title: '#47474d',
