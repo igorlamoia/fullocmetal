@@ -73,14 +73,18 @@ export const Home = () => {
 	const fetchData = async () => {
 		try {
 			setIsLoading(true);
-			// const dbRef = ref(db);
-			onValue(ref(db, 'cars'), (snapshot) => {
-				if (snapshot.exists()) {
-					setData(snapshot.val());
-				} else {
-					console.log('No data available');
-				}
-			});
+			const dbRef = ref(db);
+			get(child(dbRef, 'cars'))
+				.then((snapshot) => {
+					if (snapshot.exists()) {
+						setData(snapshot.val());
+					} else {
+						console.log('No data available');
+					}
+				})
+				.catch((error) => {
+					console.error(error);
+				});
 		} catch (error) {
 			console.log('Olha o erro:', error);
 			Alert.alert('Ops...');

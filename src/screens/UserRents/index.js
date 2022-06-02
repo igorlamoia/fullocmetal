@@ -22,8 +22,7 @@ import { BackButton } from '../../components/BackButton';
 import { Car } from '../../components/Car';
 import SvgArrow from '../../assets/arrow.svg';
 // import api from '../../services/api';
-import { getDatabase, ref, child, get, onValue } from 'firebase/database';
-// import firebase from '../../config/config';
+import { ref, onValue, get, child } from 'firebase/database';
 import { db } from '../../config/config';
 import { Spinner } from '../../components/Spinner';
 
@@ -93,14 +92,22 @@ export const UserRents = () => {
 	const getRentedCarsFromUser = async () => {
 		try {
 			setIsLoading(true);
-			onValue(ref(db, 'schedules_byuser'), (snapshot) => {
-				if (snapshot.exists()) {
-					console.log(snapshot.val());
-					setRentedCars(snapshot.val());
-				} else {
-					console.log('No data available');
-				}
-			});
+			const dbRef = ref(db);
+			get(child(dbRef, 'schedules_byuser/' + 'userTester'))
+				.then((snapshot) => {
+					if (snapshot.exists()) {
+						const reservas = snapshot.val();
+						const arrayReservedCars = Object.values(reservas).map((reserva) => reserva);
+						// console.log(arrayReservedCars);
+						setRentedCars(arrayReservedCars);
+					} else {
+						setRentedCars([]);
+						console.log('No data available');
+					}
+				})
+				.catch((error) => {
+					console.error(error);
+				});
 			// const { data } = await api.get(`schedules_byuser?user_id=1`);
 			// setRentedCars(data);
 		} catch (error) {
@@ -145,7 +152,7 @@ export const UserRents = () => {
 							</PeriodView>
 						</>
 					)}
-					keyExtractor={(item) => String(item.id)}
+					keyExtractor={(item) => String(item.timestamp)}
 				/>
 			)}
 			{!isLoading && rentedCars.length === 0 && (

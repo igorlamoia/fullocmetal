@@ -31,7 +31,8 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { selectSvg } from '../../utils/selectSvg';
 import { priceReal } from '../../utils/format';
-import api from '../../services/api';
+import { ref, set } from 'firebase/database';
+import { db } from '../../config/config';
 
 export const RentDetailsScreen = () => {
 	const [isLoading, setIsLoading] = useState(false);
@@ -45,12 +46,26 @@ export const RentDetailsScreen = () => {
 
 	const handleRentComplete = async () => {
 		try {
+			const timestamp = new Date();
+			const novoAluguel = {
+				timestamp: new Date().getTime(),
+				car,
+				startDate: interval.start,
+				endDate: interval.end,
+			};
 			setIsLoading(true);
-			await api.post(`schedules_byuser`, { user_id: 1, car, startDate: interval.start, endDate: interval.end });
+			// await api.post(`schedules_byuser`, { user_id: 1, car, startDate: interval.start, endDate: interval.end });
+			// db.ref('schedules_byuser').child(2).set(cadastro);
+			// await api.put(`schedules_bycars/${car.id}`, { id: car.id, unavailable_dates: interval.period });
+			// !ID do usuário aqui
+			await set(ref(db, 'schedules_byuser/' + 'userTester/' + timestamp), {
+				...novoAluguel,
+			});
 
-			await api.put(`schedules_bycars/${car.id}`, { id: car.id, unavailable_dates: interval.period });
+			setIsLoading(false);
 			navigation.navigate('RentComplete');
 		} catch (error) {
+			console.log('aa', error);
 			setIsLoading(false);
 			Alert.alert(
 				'Ops... Algo de errado aconteceu',
