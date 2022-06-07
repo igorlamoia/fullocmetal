@@ -57,6 +57,7 @@ export const RentDetailsScreen = () => {
 			// await api.post(`schedules_byuser`, { user_id: 1, car, startDate: interval.start, endDate: interval.end });
 			// db.ref('schedules_byuser').child(2).set(cadastro);
 			// await api.put(`schedules_bycars/${car.id}`, { id: car.id, unavailable_dates: interval.period });
+			await set(ref(db, `schedules_bycars/${car.id}/${timestamp}`), { unavailable_dates: interval.period });
 			// !ID do usuário aqui
 			await set(ref(db, 'schedules_byuser/' + 'userTester/' + timestamp), {
 				...novoAluguel,
@@ -65,7 +66,7 @@ export const RentDetailsScreen = () => {
 			setIsLoading(false);
 			navigation.navigate('RentComplete');
 		} catch (error) {
-			console.log('aa', error);
+			// console.log('aa', error);
 			setIsLoading(false);
 			Alert.alert(
 				'Ops... Algo de errado aconteceu',
