@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Alert } from 'react-native';
+import { Alert, View } from 'react-native';
 import {
 	Container,
 	Header,
@@ -15,75 +15,27 @@ import {
 	NoCarsContainer,
 	Message,
 	NumberRents,
+	Options,
+	MenuView,
+	MenuItemStyled,
 } from './styles';
 import { useTheme } from 'styled-components';
 import { useNavigation } from '@react-navigation/native';
 import { BackButton } from '../../components/BackButton';
 import { Car } from '../../components/Car';
 import SvgArrow from '../../assets/arrow.svg';
-// import api from '../../services/api';
 import { ref, onValue, get, child } from 'firebase/database';
 import { db } from '../../config/config';
 import { Spinner } from '../../components/Spinner';
 
-// const data: CarData[] = [
-// 	{
-// 		id: '1',
-// 		brand: 'Panamera',
-// 		name: 'Porche',
-// 		rent: {
-// 			period: 'AO DIA',
-// 			price: 120,
-// 		},
-// 		thumbnail: 'https://www.pngplay.com/wp-content/uploads/13/Porsche-Panamera-PNG-Images-HD.png',
-// 	},
-// 	{
-// 		id: '2',
-// 		brand: 'Panamera',
-// 		name: 'Porche AXu 5670',
-// 		rent: {
-// 			period: 'AO DIA',
-// 			price: 120,
-// 		},
-// 		thumbnail: 'https://www.pngplay.com/wp-content/uploads/13/Porsche-Panamera-PNG-Images-HD.png',
-// 	},
-// 	{
-// 		id: '3',
-// 		brand: 'Panamera',
-// 		name: 'Porche AXu 5670',
-// 		rent: {
-// 			period: 'AO DIA',
-// 			price: 120,
-// 		},
-// 		thumbnail: 'https://www.pngplay.com/wp-content/uploads/13/Porsche-Panamera-PNG-Images-HD.png',
-// 	},
-// 	{
-// 		id: '4',
-// 		brand: 'Panamera',
-// 		name: 'Porche AXu 5670',
-// 		rent: {
-// 			period: 'AO DIA',
-// 			price: 120,
-// 		},
-// 		thumbnail: 'https://www.pngplay.com/wp-content/uploads/13/Porsche-Panamera-PNG-Images-HD.png',
-// 	},
-// 	{
-// 		id: '5',
-// 		brand: 'Panamera',
-// 		name: 'Porche AXu 5670',
-// 		rent: {
-// 			period: 'AO DIA',
-// 			price: 120,
-// 		},
-// 		thumbnail: 'https://www.pngplay.com/wp-content/uploads/13/Porsche-Panamera-PNG-Images-HD.png',
-// 	},
-// ];
+import { Menu, MenuDivider } from 'react-native-material-menu';
 
 export const UserRents = () => {
 	const theme = useTheme();
 	const navigation = useNavigation();
 	const [rentedCars, setRentedCars] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
+	const [visible, setVisible] = useState(false);
 
 	const handleGoBack = () => {
 		navigation.goBack();
@@ -93,7 +45,7 @@ export const UserRents = () => {
 		try {
 			setIsLoading(true);
 			const dbRef = ref(db);
-			const snapshot = await get(child(dbRef, 'schedules_byuser/' + 'userTester'));
+			const snapshot = await get(child(dbRef, 'schedules_byuser/' + 'newUserkkk'));
 			if (snapshot.exists()) {
 				const reservas = snapshot.val();
 				const arrayReservedCars = Object.values(reservas).map((reserva) => reserva);
@@ -112,6 +64,13 @@ export const UserRents = () => {
 	useEffect(() => {
 		getRentedCarsFromUser();
 	}, []);
+
+	const hideMenu = () => {
+		setVisible(false);
+	};
+	const showMenu = () => {
+		setVisible(true);
+	};
 
 	return (
 		<Container>
@@ -133,7 +92,18 @@ export const UserRents = () => {
 					data={rentedCars}
 					renderItem={({ item }) => (
 						<>
-							<Car data={item.car} />
+							<Car data={item.car} onPress={showMenu} />
+							<MenuView>
+								<Menu visible={visible} anchor={<Options onPress={showMenu} />} onRequestClose={hideMenu}>
+									<MenuItemStyled onPress={hideMenu}>Informaçõe do carro</MenuItemStyled>
+									<MenuItemStyled onPress={hideMenu}>Editar Periodo</MenuItemStyled>
+									<MenuItemStyled onPress={hideMenu}>Detalhes da reserva</MenuItemStyled>
+									<MenuDivider />
+									<MenuItemStyled onPress={hideMenu} pressColor={theme.colors.main}>
+										Cancelar Reserva
+									</MenuItemStyled>
+								</Menu>
+							</MenuView>
 							<PeriodView>
 								<PeriodText>Periodo</PeriodText>
 								<DateWrapper>
@@ -149,7 +119,7 @@ export const UserRents = () => {
 			)}
 			{!isLoading && rentedCars.length === 0 && (
 				<NoCarsContainer>
-					<Message>Sua lista está vazia!</Message>
+					<Message>Sua garagem está vazia!</Message>
 					<NoCarsToShow />
 				</NoCarsContainer>
 			)}

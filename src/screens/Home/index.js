@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { Container, Header, TotalCars, HeaderContent, FlatCars } from './styles';
+import { Container, Header, TotalCars, HeaderContent, FlatCars, NoConnectionSVG } from './styles';
 import Logo from '../../assets/logo.svg';
 import { Car } from '../../components/Car';
 import { useNavigation } from '@react-navigation/native';
@@ -12,63 +12,10 @@ import { getDatabase, ref, child, get, onValue } from 'firebase/database';
 // import firebase from '../../config/config';
 import { db } from '../../config/config';
 
-// const data = [
-// 	{
-// 		id: '1',
-// 		brand: 'Panamera',
-// 		name: 'Porche',
-// 		rent: {
-// 			period: 'AO DIA',
-// 			price: 120,
-// 		},
-// 		thumbnail: 'https://www.pngplay.com/wp-content/uploads/13/Porsche-Panamera-PNG-Images-HD.png',
-// 	},
-// 	{
-// 		id: '2',
-// 		brand: 'Panamera',
-// 		name: 'Porche AXu 5670',
-// 		rent: {
-// 			period: 'AO DIA',
-// 			price: 120,
-// 		},
-// 		thumbnail: 'https://www.pngplay.com/wp-content/uploads/13/Porsche-Panamera-PNG-Images-HD.png',
-// 	},
-// 	{
-// 		id: '3',
-// 		brand: 'Panamera',
-// 		name: 'Porche AXu 5670',
-// 		rent: {
-// 			period: 'AO DIA',
-// 			price: 120,
-// 		},
-// 		thumbnail: 'https://www.pngplay.com/wp-content/uploads/13/Porsche-Panamera-PNG-Images-HD.png',
-// 	},
-// 	{
-// 		id: '4',
-// 		brand: 'Panamera',
-// 		name: 'Porche AXu 5670',
-// 		rent: {
-// 			period: 'AO DIA',
-// 			price: 120,
-// 		},
-// 		thumbnail: 'https://www.pngplay.com/wp-content/uploads/13/Porsche-Panamera-PNG-Images-HD.png',
-// 	},
-// 	{
-// 		id: '5',
-// 		brand: 'Panamera',
-// 		name: 'Porche AXu 5670',
-// 		rent: {
-// 			period: 'AO DIA',
-// 			price: 120,
-// 		},
-// 		thumbnail: 'https://www.pngplay.com/wp-content/uploads/13/Porsche-Panamera-PNG-Images-HD.png',
-// 	},
-// ];
-
 export const Home = () => {
 	const navigation = useNavigation();
 	const [data, setData] = useState([]);
-	const [isLoading, setIsLoading] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
 
 	const fetchData = async () => {
 		try {
@@ -114,6 +61,7 @@ export const Home = () => {
 				renderItem={({ item }) => <Car onPress={() => handleCar(item)} data={item} />}
 				keyExtractor={(item) => item.id}
 			/>
+			{!isLoading && data.length === 0 && <NoConnectionSVG />}
 			<FloatingButton onPress={handleMyRents} />
 		</Container>
 	);

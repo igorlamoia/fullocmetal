@@ -52,14 +52,16 @@ export const RentDetailsScreen = () => {
 				car,
 				startDate: interval.start,
 				endDate: interval.end,
+				id_reserva: timestamp,
 			};
 			setIsLoading(true);
 			// await api.post(`schedules_byuser`, { user_id: 1, car, startDate: interval.start, endDate: interval.end });
 			// db.ref('schedules_byuser').child(2).set(cadastro);
 			// await api.put(`schedules_bycars/${car.id}`, { id: car.id, unavailable_dates: interval.period });
-			await set(ref(db, `schedules_bycars/${car.id}/${timestamp}`), { unavailable_dates: interval.period });
 			// !ID do usuário aqui
-			await set(ref(db, 'schedules_byuser/' + 'userTester/' + timestamp), {
+			const user = 'newUserkkk';
+			await set(ref(db, `schedules_bycars/${car.id}/${timestamp}`), { unavailable_dates: interval.period, user: user });
+			await set(ref(db, 'schedules_byuser/' + user + '/' + timestamp), {
 				...novoAluguel,
 			});
 

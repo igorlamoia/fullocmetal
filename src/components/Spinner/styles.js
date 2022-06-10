@@ -1,6 +1,6 @@
 import styled from 'styled-components/native';
 import LottieView from 'lottie-react-native';
-import SpinnerCar from '../../assets/lottie/spinner-car.json';
+import SpinnerCar from '../../assets/lottie/loading-drift.json';
 
 export const CarSpinner = styled(LottieView).attrs({
 	autoPlay: true,
