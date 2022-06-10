@@ -4,7 +4,6 @@ import { Container, Header, TotalCars, HeaderContent, FlatCars, NoConnectionSVG 
 import Logo from '../../assets/logo.svg';
 import { Car } from '../../components/Car';
 import { useNavigation } from '@react-navigation/native';
-import api from '../../services/api';
 import { Alert } from 'react-native';
 import { Spinner } from '../../components/Spinner';
 import { FloatingButton } from '../../components/FloatingButton/index.js';

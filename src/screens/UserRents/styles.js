@@ -4,10 +4,6 @@ import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import LottieView from 'lottie-react-native';
 import { FlatList } from 'react-native';
 import NoCars from '../../assets/lottie/empty-garage.json';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { RectButton } from 'react-native-gesture-handler';
-import { createElement } from 'react';
-import { MenuItem } from 'react-native-material-menu';
 
 export const Container = styled.View`
 	flex: 1;
@@ -94,32 +90,3 @@ export const NumberRents = styled(Text)`
 	font-family: ${({ theme }) => theme.fonts.secondary_500};
 	color: ${({ theme }) => theme.colors.title};
 `;
-
-export const MenuIcon = styled(MaterialCommunityIcons).attrs((props) => ({
-	color: props.theme.colors.title,
-	name: 'car-cog',
-	size: 24,
-}))``;
-
-export const Options = styled(RectButton).attrs({
-	children: [
-		createElement(MenuIcon),
-		// createReactElement(Variavel, {attrs}, chlidren),
-	],
-})`
-	margin: 10px;
-`;
-
-export const MenuView = styled.View`
-	position: absolute;
-	width: 100%;
-	flex-direction: row;
-	justify-content: flex-end;
-`;
-
-export const MenuItemStyled = styled(MenuItem).attrs((props) => ({
-	textStyle: {
-		fontFamily: props.theme.fonts.secondary_400,
-		color: props.theme.colors.title,
-	},
-}))``;

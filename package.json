@@ -8,7 +8,8 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "api": "json-server ./src/services/server.json --host 200.18.141.94 --port 3333 --delay 2000"
+    "api": "json-server ./src/services/server.json --host 200.18.141.94 --port 3333 --delay 2000",
+    "debug": "adb reverse tcp:9090 tcp:9090"
   },
   "dependencies": {
     "@expo-google-fonts/archivo": "^0.2.2",
@@ -48,7 +49,8 @@
     "styled-components": "^5.3.5"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.9"
+    "@babel/core": "^7.12.9",
+    "reactotron-react-native": "^5.0.2"
   },
   "private": true
 }

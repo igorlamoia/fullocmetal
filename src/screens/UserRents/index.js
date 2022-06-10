@@ -15,29 +15,24 @@ import {
 	NoCarsContainer,
 	Message,
 	NumberRents,
-	Options,
-	MenuView,
-	MenuItemStyled,
 } from './styles';
 import { useTheme } from 'styled-components';
 import { useNavigation } from '@react-navigation/native';
 import { BackButton } from '../../components/BackButton';
-import { Car } from '../../components/Car';
 import SvgArrow from '../../assets/arrow.svg';
 import { ref, onValue, get, child } from 'firebase/database';
 import { db } from '../../config/config';
 import { Spinner } from '../../components/Spinner';
 import Modal from 'react-native-modal';
 
-import { Menu, MenuDivider } from 'react-native-material-menu';
 import { Button } from '../../components/Button';
+import { MenuCarRented } from './components/Menu';
 
 export const UserRents = () => {
 	const theme = useTheme();
 	const navigation = useNavigation();
 	const [rentedCars, setRentedCars] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
-	const [visible, setVisible] = useState(false);
 	const [isModalVisible, setIsModalVisible] = useState(false);
 
 	const handleGoBack = () => {
@@ -68,24 +63,8 @@ export const UserRents = () => {
 		getRentedCarsFromUser();
 	}, []);
 
-	const hideMenu = () => {
-		setVisible(false);
-	};
-	const showMenu = () => {
-		setVisible(true);
-	};
-
 	const toggleModal = () => {
 		setIsModalVisible(!isModalVisible);
-	};
-
-	const handleCancel = () => {
-		hideMenu();
-		toggleModal();
-	};
-
-	const handleCarDetails = (car) => {
-		navigation.navigate('Details', { car, previus: 'UserRents' });
 	};
 
 	return (
@@ -108,24 +87,13 @@ export const UserRents = () => {
 					data={rentedCars}
 					renderItem={({ item }) => (
 						<>
-							<Car data={item.car} onPress={showMenu} />
-							<MenuView>
-								<Menu visible={visible} anchor={<Options onPress={showMenu} />} onRequestClose={hideMenu}>
-									<MenuItemStyled onPress={() => handleCarDetails(item.car)}>Informaçõe do carro</MenuItemStyled>
-									<MenuItemStyled onPress={hideMenu}>Editar Periodo</MenuItemStyled>
-									<MenuItemStyled onPress={hideMenu}>Detalhes da reserva</MenuItemStyled>
-									<MenuDivider />
-									<MenuItemStyled onPress={handleCancel} pressColor={theme.colors.main}>
-										Cancelar Reserva
-									</MenuItemStyled>
-								</Menu>
-							</MenuView>
+							<MenuCarRented item={item} toggleModal={toggleModal} />
 							<PeriodView>
 								<PeriodText>Periodo</PeriodText>
 								<DateWrapper>
-									<TextDate>{item.startDate}</TextDate>
+									<TextDate>{item.start}</TextDate>
 									<SvgArrow width="14" height="8" />
-									<TextDate>{item.endDate}</TextDate>
+									<TextDate>{item.end}</TextDate>
 								</DateWrapper>
 							</PeriodView>
 						</>

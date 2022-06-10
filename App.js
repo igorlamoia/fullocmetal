@@ -13,6 +13,10 @@ import { ThemeProvider } from 'styled-components';
 import { Routes } from './src/routes';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
+if (__DEV__) {
+	import('./ReactotronConfig').then(() => console.log('Reactotron Configured'));
+}
+
 export default function App() {
 	let [fontsLoaded] = useFonts({
 		Inter_400Regular,

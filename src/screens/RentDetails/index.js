@@ -37,10 +37,10 @@ import { db } from '../../config/config';
 export const RentDetailsScreen = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const route = useRoute();
-	const { car, interval } = route.params;
+	const { car, interval, previus } = route.params;
 	const navigation = useNavigation();
 	const theme = useTheme();
-
+	console.tron.log(route.params);
 	const price = priceReal(car.rent.price);
 	const totalPrice = priceReal(car.rent.price * interval.size);
 
@@ -50,8 +50,9 @@ export const RentDetailsScreen = () => {
 			const novoAluguel = {
 				timestamp: new Date().getTime(),
 				car,
-				startDate: interval.start,
-				endDate: interval.end,
+				start: interval.start,
+				end: interval.end,
+				sizeInterval: interval.size,
 				id_reserva: timestamp,
 			};
 			setIsLoading(true);
@@ -134,13 +135,16 @@ export const RentDetailsScreen = () => {
 					</TextWrapper>
 				</Content>
 				<ButtonBlock>
-					<Button
-						isLoading={isLoading}
-						enabled={!isLoading}
-						onPress={handleRentComplete}
-						title="Alugar agora"
-						color={theme.colors.success}
-					/>
+					{!previus && (
+						<Button
+							isLoading={isLoading}
+							enabled={!isLoading}
+							onPress={handleRentComplete}
+							title="Alugar agora"
+							color={theme.colors.success}
+						/>
+					)}
+					{!!previus && <Button onPress={handleGoBack} title="Voltar" color={theme.colors.success} />}
 				</ButtonBlock>
 			</Container>
 		</>
