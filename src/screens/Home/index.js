@@ -60,6 +60,8 @@ export const Home = () => {
 				data={data}
 				renderItem={({ item }) => <Car onPress={() => handleCar(item)} data={item} />}
 				keyExtractor={(item) => item.id}
+				onRefresh={fetchData}
+				refreshing={false}
 			/>
 			{!isLoading && data.length === 0 && <NoConnectionSVG />}
 			<FloatingButton onPress={handleMyRents} />

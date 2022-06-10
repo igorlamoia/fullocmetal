@@ -26,7 +26,7 @@ import { priceReal } from '../../utils/format';
 
 export const Details = () => {
 	const route = useRoute();
-	const { car } = route.params;
+	const { car, previus } = route.params;
 	const navigation = useNavigation();
 	// console.log(car);
 	const handleChooseRentDate = () => {
@@ -64,7 +64,8 @@ export const Details = () => {
 					<TextInfo>{car.about}</TextInfo>
 				</Content>
 				<ButtonBlock>
-					<Button onPress={handleChooseRentDate} title="Escolher periodo do aluguel" />
+					{!!previus && <Button onPress={handleGoBack} title="Voltar" />}
+					{!previus && <Button onPress={handleChooseRentDate} title="Escolher periodo do aluguel" />}
 				</ButtonBlock>
 			</Container>
 		</>

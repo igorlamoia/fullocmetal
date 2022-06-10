@@ -27,8 +27,10 @@ import SvgArrow from '../../assets/arrow.svg';
 import { ref, onValue, get, child } from 'firebase/database';
 import { db } from '../../config/config';
 import { Spinner } from '../../components/Spinner';
+import Modal from 'react-native-modal';
 
 import { Menu, MenuDivider } from 'react-native-material-menu';
+import { Button } from '../../components/Button';
 
 export const UserRents = () => {
 	const theme = useTheme();
@@ -36,6 +38,7 @@ export const UserRents = () => {
 	const [rentedCars, setRentedCars] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [visible, setVisible] = useState(false);
+	const [isModalVisible, setIsModalVisible] = useState(false);
 
 	const handleGoBack = () => {
 		navigation.goBack();
@@ -72,6 +75,19 @@ export const UserRents = () => {
 		setVisible(true);
 	};
 
+	const toggleModal = () => {
+		setIsModalVisible(!isModalVisible);
+	};
+
+	const handleCancel = () => {
+		hideMenu();
+		toggleModal();
+	};
+
+	const handleCarDetails = (car) => {
+		navigation.navigate('Details', { car, previus: 'UserRents' });
+	};
+
 	return (
 		<Container>
 			<Header>
@@ -95,11 +111,11 @@ export const UserRents = () => {
 							<Car data={item.car} onPress={showMenu} />
 							<MenuView>
 								<Menu visible={visible} anchor={<Options onPress={showMenu} />} onRequestClose={hideMenu}>
-									<MenuItemStyled onPress={hideMenu}>Informaçõe do carro</MenuItemStyled>
+									<MenuItemStyled onPress={() => handleCarDetails(item.car)}>Informaçõe do carro</MenuItemStyled>
 									<MenuItemStyled onPress={hideMenu}>Editar Periodo</MenuItemStyled>
 									<MenuItemStyled onPress={hideMenu}>Detalhes da reserva</MenuItemStyled>
 									<MenuDivider />
-									<MenuItemStyled onPress={hideMenu} pressColor={theme.colors.main}>
+									<MenuItemStyled onPress={handleCancel} pressColor={theme.colors.main}>
 										Cancelar Reserva
 									</MenuItemStyled>
 								</Menu>
@@ -123,6 +139,15 @@ export const UserRents = () => {
 					<NoCarsToShow />
 				</NoCarsContainer>
 			)}
+			<Modal isVisible={isModalVisible} onBackdropPress={toggleModal}>
+				<View style={{ backgroundColor: 'white', height: '50%' }}>
+					<Text>X</Text>
+					<Text>Deseja realmente cancelar?</Text>
+					<Text>Você pode editar a data agendada de acordo com sua </Text>
+
+					<Button title="Cancelar Sapoha" onPress={toggleModal} />
+				</View>
+			</Modal>
 		</Container>
 	);
 };
