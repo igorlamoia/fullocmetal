@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTheme } from 'styled-components';
 import { BackButton } from '../../components/BackButton';
-import { Calendar, DayProps, MarkedDatesProps } from '../../components/Calendar';
+import { Calendar } from '../../components/Calendar';
 import SvgArrow from '../../assets/arrow.svg';
 import { Container, Header, Title, LineWrapper, Text, TextDate, Scroll, BlockButton } from './styles';
 import { Button } from '../../components/Button';
@@ -10,19 +10,19 @@ import { generateInterval } from '../../components/Calendar/generateInterval';
 import { showDate } from '../../utils/format';
 import { onValue, ref } from 'firebase/database';
 import { db } from '../../config/config';
+import { useGlobalContext } from '../../hooks/useGlobalVariables';
+import { Spinner } from '../../components/Spinner';
+
 export const RentDate = () => {
 	const route = useRoute();
 	const { car } = route.params;
 	const theme = useTheme();
 	const navigation = useNavigation();
-
-	// const diasBloqueados = {
-	// 	'2022-06-19': { marked: true, disabled: true, disableTouchEvent: true, dotColor: 'red' },
-	// };
 	const [diasBloqueados, setDiasBloqueados] = useState({});
 	const [lastSelectedDate, setLastSelectedDate] = useState({});
 	const [selectedDate, setSelectedDate] = useState({});
 	const [rentalPeriod, setRentalPeriod] = useState({});
+	const { isLoading, setIsLoading } = useGlobalContext();
 
 	const handleDayChange = (date) => {
 		// Se a pessoa quiser desmarcar a única data que escolheu
@@ -74,8 +74,7 @@ export const RentDate = () => {
 
 	const fetchData = async () => {
 		try {
-			// setIsLoading(true);
-			// await set(ref(db, `schedules_bycars/${car.id}/${timestamp}`), { unavailable_dates: interval.period });
+			setIsLoading(true);
 			onValue(ref(db, `schedules_bycars/${car.id}`), (snapshot) => {
 				if (snapshot.exists()) {
 					let diasIndisponiveis = {};
@@ -99,16 +98,17 @@ export const RentDate = () => {
 							...novo,
 						};
 					});
-					// console.log('diasIndisponiveis', diasIndisponiveis);
-					// console.log('diasIndisponiveisFormatado', diasIndisponiveisFormatado);
 					setDiasBloqueados(diasIndisponiveisFormatado);
+					setIsLoading(false);
 				} else {
+					setIsLoading(false);
 					console.log('No data available');
 				}
 			});
 		} catch (error) {
 			console.log('Olha o erro:', error);
 			Alert.alert('Ops...');
+			etIsLoading(false);
 		} finally {
 			// setIsLoading(false);
 		}
@@ -137,9 +137,12 @@ export const RentDate = () => {
 					<TextDate selected={!!lastSelectedDate.timestamp}>{rentalPeriod.formatEnd}</TextDate>
 				</LineWrapper>
 			</Header>
-			<Scroll>
-				<Calendar onDayPress={handleDayChange} markedDates={{ ...selectedDate, ...diasBloqueados }} />
-			</Scroll>
+			{!isLoading && (
+				<Scroll>
+					<Calendar onDayPress={handleDayChange} markedDates={{ ...selectedDate, ...diasBloqueados }} />
+				</Scroll>
+			)}
+			{isLoading && <Spinner size={200} />}
 			<BlockButton>
 				<Button enabled={!!lastSelectedDate.timestamp} onPress={handleConfirm} title="Confirmar" />
 			</BlockButton>

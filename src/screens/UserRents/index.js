@@ -23,7 +23,6 @@ import SvgArrow from '../../assets/arrow.svg';
 import { ref, onValue } from 'firebase/database';
 import { db } from '../../config/config';
 import { Spinner } from '../../components/Spinner';
-import Modal from 'react-native-modal';
 
 import { MenuCarRented } from './components/Menu';
 
@@ -34,7 +33,6 @@ export const UserRents = () => {
 	const navigation = useNavigation();
 	const [rentedCars, setRentedCars] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
-	const [modalData, setModalData] = useState(false);
 
 	const handleGoBack = () => {
 		navigation.goBack();
@@ -63,10 +61,6 @@ export const UserRents = () => {
 		getRentedCarsFromUser();
 	}, []);
 
-	const toggleModal = (data) => {
-		setModalData({ ...data });
-	};
-
 	return (
 		<Container>
 			<Header>
@@ -87,7 +81,7 @@ export const UserRents = () => {
 					data={rentedCars}
 					renderItem={({ item }) => (
 						<>
-							<MenuCarRented item={item} toggleModal={toggleModal} />
+							<MenuCarRented item={item} />
 							<PeriodView>
 								<PeriodText>Periodo</PeriodText>
 								<DateWrapper>
@@ -107,9 +101,6 @@ export const UserRents = () => {
 					<NoCarsToShow />
 				</NoCarsContainer>
 			)}
-			<Modal isVisible={modalData.visible} onBackdropPress={toggleModal}>
-				{modalData.body}
-			</Modal>
 		</Container>
 	);
 };

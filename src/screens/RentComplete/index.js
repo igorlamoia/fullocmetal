@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import SvgLogo from '../../assets/logo_background_gray.svg';
 import SvgDone from '../../assets/done.svg';
-import { useWindowDimensions } from 'react-native';
+import { BackHandler, useWindowDimensions } from 'react-native';
 import { Container, Text, Title, ButtonBlock } from './styles';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { Button } from '../../components/Button';
@@ -16,6 +16,17 @@ export const RentComplete = () => {
 	const handlePress = () => {
 		navigation.navigate('Home');
 	};
+
+	function handleBackButtonClick() {
+		// Não deixa dar navigation.goBack();
+		return true;
+	}
+
+	useEffect(() => {
+		BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
+
+		return () => BackHandler.removeEventListener('hardwareBackPress', handleBackButtonClick);
+	}, []);
 
 	return (
 		<Container>

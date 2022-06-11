@@ -10,11 +10,12 @@ import { FloatingButton } from '../../components/FloatingButton/index.js';
 import { getDatabase, ref, child, get, onValue } from 'firebase/database';
 // import firebase from '../../config/config';
 import { db } from '../../config/config';
+import { useGlobalContext } from '../../hooks/useGlobalVariables';
 
 export const Home = () => {
 	const navigation = useNavigation();
 	const [data, setData] = useState([]);
-	const [isLoading, setIsLoading] = useState(true);
+	const { isLoading, setIsLoading } = useGlobalContext();
 
 	const fetchData = async () => {
 		try {

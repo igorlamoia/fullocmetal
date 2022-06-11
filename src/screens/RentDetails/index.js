@@ -69,7 +69,6 @@ export const RentDetailsScreen = () => {
 				...novoAluguel,
 			});
 
-			setIsLoading(false);
 			navigation.navigate('RentComplete');
 		} catch (error) {
 			// console.log('aa', error);
