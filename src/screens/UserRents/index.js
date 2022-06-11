@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, View } from 'react-native';
+import { Alert } from 'react-native';
 import {
 	Container,
 	Header,
@@ -20,41 +20,41 @@ import { useTheme } from 'styled-components';
 import { useNavigation } from '@react-navigation/native';
 import { BackButton } from '../../components/BackButton';
 import SvgArrow from '../../assets/arrow.svg';
-import { ref, onValue, get, child } from 'firebase/database';
+import { ref, onValue } from 'firebase/database';
 import { db } from '../../config/config';
 import { Spinner } from '../../components/Spinner';
 import Modal from 'react-native-modal';
 
-import { Button } from '../../components/Button';
 import { MenuCarRented } from './components/Menu';
+
+const user = 'newUserkkk';
 
 export const UserRents = () => {
 	const theme = useTheme();
 	const navigation = useNavigation();
 	const [rentedCars, setRentedCars] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
-	const [isModalVisible, setIsModalVisible] = useState(false);
+	const [modalData, setModalData] = useState(false);
 
 	const handleGoBack = () => {
 		navigation.goBack();
 	};
 
-	const getRentedCarsFromUser = async () => {
+	const getRentedCarsFromUser = () => {
 		try {
 			setIsLoading(true);
-			const dbRef = ref(db);
-			const snapshot = await get(child(dbRef, 'schedules_byuser/' + 'newUserkkk'));
-			if (snapshot.exists()) {
-				const reservas = snapshot.val();
-				const arrayReservedCars = Object.values(reservas).map((reserva) => reserva);
-				// console.log(arrayReservedCars);
-				setRentedCars(arrayReservedCars);
-			} else {
-				setRentedCars([]);
-			}
+			onValue(ref(db, `schedules_byuser/${user}`), (snapshot) => {
+				if (snapshot.exists()) {
+					const reservas = snapshot.val();
+					const arrayReservedCars = Object.values(reservas).map((reserva) => reserva);
+					setRentedCars(arrayReservedCars);
+				} else {
+					setRentedCars([]);
+				}
+				setIsLoading(false);
+			});
 		} catch (error) {
 			Alert.alert('Ops...', 'Algo de errado aconteceu');
-		} finally {
 			setIsLoading(false);
 		}
 	};
@@ -63,8 +63,8 @@ export const UserRents = () => {
 		getRentedCarsFromUser();
 	}, []);
 
-	const toggleModal = () => {
-		setIsModalVisible(!isModalVisible);
+	const toggleModal = (data) => {
+		setModalData({ ...data });
 	};
 
 	return (
@@ -98,7 +98,7 @@ export const UserRents = () => {
 							</PeriodView>
 						</>
 					)}
-					keyExtractor={(item) => String(item.timestamp)}
+					keyExtractor={(item) => String(item.id_reserva)}
 				/>
 			)}
 			{!isLoading && rentedCars.length === 0 && (
@@ -107,14 +107,8 @@ export const UserRents = () => {
 					<NoCarsToShow />
 				</NoCarsContainer>
 			)}
-			<Modal isVisible={isModalVisible} onBackdropPress={toggleModal}>
-				<View style={{ backgroundColor: 'white', height: '50%' }}>
-					<Text>X</Text>
-					<Text>Deseja realmente cancelar?</Text>
-					<Text>Você pode editar a data agendada de acordo com sua </Text>
-
-					<Button title="Cancelar Sapoha" onPress={toggleModal} />
-				</View>
+			<Modal isVisible={modalData.visible} onBackdropPress={toggleModal}>
+				{modalData.body}
 			</Modal>
 		</Container>
 	);

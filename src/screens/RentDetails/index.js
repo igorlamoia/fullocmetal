@@ -46,9 +46,8 @@ export const RentDetailsScreen = () => {
 
 	const handleRentComplete = async () => {
 		try {
-			const timestamp = new Date();
+			const timestamp = new Date().getTime();
 			const novoAluguel = {
-				timestamp: new Date().getTime(),
 				car,
 				start: interval.start,
 				end: interval.end,
@@ -61,7 +60,11 @@ export const RentDetailsScreen = () => {
 			// await api.put(`schedules_bycars/${car.id}`, { id: car.id, unavailable_dates: interval.period });
 			// !ID do usuário aqui
 			const user = 'newUserkkk';
-			await set(ref(db, `schedules_bycars/${car.id}/${timestamp}`), { unavailable_dates: interval.period, user: user });
+			await set(ref(db, `schedules_bycars/${car.id}/${timestamp}`), {
+				unavailable_dates: interval.period,
+				user: user,
+				id_reserva: timestamp,
+			});
 			await set(ref(db, 'schedules_byuser/' + user + '/' + timestamp), {
 				...novoAluguel,
 			});
