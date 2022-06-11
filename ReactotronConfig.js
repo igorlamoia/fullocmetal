@@ -1,10 +1,8 @@
 import Reactotron from 'reactotron-react-native';
-import { AsyncStorage } from 'react-native';
 
-console.tron = Reactotron.setAsyncStorageHandler(AsyncStorage)
-	.configure({
-		name: 'Reactotron In Expo demo',
-	})
+console.tron = Reactotron.configure({
+	name: 'Reactotron In Expo demo',
+})
 	.useReactNative({
 		asyncStorage: false,
 		networking: {
