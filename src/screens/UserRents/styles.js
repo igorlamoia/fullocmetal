@@ -3,7 +3,7 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import LottieView from 'lottie-react-native';
 import { FlatList } from 'react-native';
-import NoCars from '../../assets/lottie/no-cars.json';
+import NoCars from '../../assets/lottie/empty-garage.json';
 
 export const Container = styled.View`
 	flex: 1;
@@ -76,7 +76,7 @@ export const NoCarsToShow = styled(LottieView).attrs({
 	loop: true,
 	source: NoCars,
 })`
-	height: 120px;
+	height: 150px;
 `;
 
 export const NoCarsContainer = styled.View`

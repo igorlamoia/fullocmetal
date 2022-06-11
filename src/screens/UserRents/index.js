@@ -19,65 +19,14 @@ import {
 import { useTheme } from 'styled-components';
 import { useNavigation } from '@react-navigation/native';
 import { BackButton } from '../../components/BackButton';
-import { Car } from '../../components/Car';
 import SvgArrow from '../../assets/arrow.svg';
-// import api from '../../services/api';
-import { ref, onValue, get, child } from 'firebase/database';
+import { ref, onValue } from 'firebase/database';
 import { db } from '../../config/config';
 import { Spinner } from '../../components/Spinner';
 
-// const data: CarData[] = [
-// 	{
-// 		id: '1',
-// 		brand: 'Panamera',
-// 		name: 'Porche',
-// 		rent: {
-// 			period: 'AO DIA',
-// 			price: 120,
-// 		},
-// 		thumbnail: 'https://www.pngplay.com/wp-content/uploads/13/Porsche-Panamera-PNG-Images-HD.png',
-// 	},
-// 	{
-// 		id: '2',
-// 		brand: 'Panamera',
-// 		name: 'Porche AXu 5670',
-// 		rent: {
-// 			period: 'AO DIA',
-// 			price: 120,
-// 		},
-// 		thumbnail: 'https://www.pngplay.com/wp-content/uploads/13/Porsche-Panamera-PNG-Images-HD.png',
-// 	},
-// 	{
-// 		id: '3',
-// 		brand: 'Panamera',
-// 		name: 'Porche AXu 5670',
-// 		rent: {
-// 			period: 'AO DIA',
-// 			price: 120,
-// 		},
-// 		thumbnail: 'https://www.pngplay.com/wp-content/uploads/13/Porsche-Panamera-PNG-Images-HD.png',
-// 	},
-// 	{
-// 		id: '4',
-// 		brand: 'Panamera',
-// 		name: 'Porche AXu 5670',
-// 		rent: {
-// 			period: 'AO DIA',
-// 			price: 120,
-// 		},
-// 		thumbnail: 'https://www.pngplay.com/wp-content/uploads/13/Porsche-Panamera-PNG-Images-HD.png',
-// 	},
-// 	{
-// 		id: '5',
-// 		brand: 'Panamera',
-// 		name: 'Porche AXu 5670',
-// 		rent: {
-// 			period: 'AO DIA',
-// 			price: 120,
-// 		},
-// 		thumbnail: 'https://www.pngplay.com/wp-content/uploads/13/Porsche-Panamera-PNG-Images-HD.png',
-// 	},
-// ];
+import { MenuCarRented } from './components/Menu';
+
+const user = 'newUserkkk';
 
 export const UserRents = () => {
 	const theme = useTheme();
@@ -89,22 +38,21 @@ export const UserRents = () => {
 		navigation.goBack();
 	};
 
-	const getRentedCarsFromUser = async () => {
+	const getRentedCarsFromUser = () => {
 		try {
 			setIsLoading(true);
-			const dbRef = ref(db);
-			const snapshot = await get(child(dbRef, 'schedules_byuser/' + 'userTester'));
-			if (snapshot.exists()) {
-				const reservas = snapshot.val();
-				const arrayReservedCars = Object.values(reservas).map((reserva) => reserva);
-				// console.log(arrayReservedCars);
-				setRentedCars(arrayReservedCars);
-			} else {
-				setRentedCars([]);
-			}
+			onValue(ref(db, `schedules_byuser/${user}`), (snapshot) => {
+				if (snapshot.exists()) {
+					const reservas = snapshot.val();
+					const arrayReservedCars = Object.values(reservas).map((reserva) => reserva);
+					setRentedCars(arrayReservedCars);
+				} else {
+					setRentedCars([]);
+				}
+				setIsLoading(false);
+			});
 		} catch (error) {
 			Alert.alert('Ops...', 'Algo de errado aconteceu');
-		} finally {
 			setIsLoading(false);
 		}
 	};
@@ -133,23 +81,23 @@ export const UserRents = () => {
 					data={rentedCars}
 					renderItem={({ item }) => (
 						<>
-							<Car data={item.car} />
+							<MenuCarRented item={item} />
 							<PeriodView>
 								<PeriodText>Periodo</PeriodText>
 								<DateWrapper>
-									<TextDate>{item.startDate}</TextDate>
+									<TextDate>{item.start}</TextDate>
 									<SvgArrow width="14" height="8" />
-									<TextDate>{item.endDate}</TextDate>
+									<TextDate>{item.end}</TextDate>
 								</DateWrapper>
 							</PeriodView>
 						</>
 					)}
-					keyExtractor={(item) => String(item.timestamp)}
+					keyExtractor={(item) => String(item.id_reserva)}
 				/>
 			)}
 			{!isLoading && rentedCars.length === 0 && (
 				<NoCarsContainer>
-					<Message>Sua lista está vazia!</Message>
+					<Message>Sua garagem está vazia!</Message>
 					<NoCarsToShow />
 				</NoCarsContainer>
 			)}

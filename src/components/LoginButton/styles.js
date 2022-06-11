@@ -12,7 +12,7 @@ export const Container = styled(RectButton)`
 	flex-direction: row;
 	border-radius: 5px;
 	width: 100%;
-	padding: 0 15px;
+	padding: 0 20px;
 	margin-bottom: 10px;
 `;
 
@@ -21,7 +21,7 @@ export const LogoWrapper = styled.View`
 	border-right-color: ${({ theme }) => theme.colors.border_login};
 	height: 100%;
 	justify-content: center;
-	padding-right: 15px;
+	padding-right: 20px;
 `;
 
 export const Title = styled.Text`

@@ -37,35 +37,41 @@ import { db } from '../../config/config';
 export const RentDetailsScreen = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const route = useRoute();
-	const { car, interval } = route.params;
+	const { car, interval, previus } = route.params;
 	const navigation = useNavigation();
 	const theme = useTheme();
-
+	console.tron.log(route.params);
 	const price = priceReal(car.rent.price);
 	const totalPrice = priceReal(car.rent.price * interval.size);
 
 	const handleRentComplete = async () => {
 		try {
-			const timestamp = new Date();
+			const timestamp = new Date().getTime();
 			const novoAluguel = {
-				timestamp: new Date().getTime(),
 				car,
-				startDate: interval.start,
-				endDate: interval.end,
+				start: interval.start,
+				end: interval.end,
+				sizeInterval: interval.size,
+				id_reserva: timestamp,
 			};
 			setIsLoading(true);
 			// await api.post(`schedules_byuser`, { user_id: 1, car, startDate: interval.start, endDate: interval.end });
 			// db.ref('schedules_byuser').child(2).set(cadastro);
 			// await api.put(`schedules_bycars/${car.id}`, { id: car.id, unavailable_dates: interval.period });
 			// !ID do usuário aqui
-			await set(ref(db, 'schedules_byuser/' + 'userTester/' + timestamp), {
+			const user = 'newUserkkk';
+			await set(ref(db, `schedules_bycars/${car.id}/${timestamp}`), {
+				unavailable_dates: interval.period,
+				user: user,
+				id_reserva: timestamp,
+			});
+			await set(ref(db, 'schedules_byuser/' + user + '/' + timestamp), {
 				...novoAluguel,
 			});
 
-			setIsLoading(false);
 			navigation.navigate('RentComplete');
 		} catch (error) {
-			console.log('aa', error);
+			// console.log('aa', error);
 			setIsLoading(false);
 			Alert.alert(
 				'Ops... Algo de errado aconteceu',
@@ -131,13 +137,16 @@ export const RentDetailsScreen = () => {
 					</TextWrapper>
 				</Content>
 				<ButtonBlock>
-					<Button
-						isLoading={isLoading}
-						enabled={!isLoading}
-						onPress={handleRentComplete}
-						title="Alugar agora"
-						color={theme.colors.success}
-					/>
+					{!previus && (
+						<Button
+							isLoading={isLoading}
+							enabled={!isLoading}
+							onPress={handleRentComplete}
+							title="Alugar agora"
+							color={theme.colors.success}
+						/>
+					)}
+					{!!previus && <Button onPress={handleGoBack} title="Voltar" color={theme.colors.success} />}
 				</ButtonBlock>
 			</Container>
 		</>

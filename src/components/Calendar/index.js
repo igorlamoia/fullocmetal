@@ -34,7 +34,7 @@ export const Calendar = ({ markedDates, onDayPress }) => {
 			firstDay={1}
 			minDate={new Date().toString()}
 			markingType="period"
-			markedDates={markedDates}
+			markedDates={{ ...markedDates }}
 			onDayPress={onDayPress}
 		/>
 	);
