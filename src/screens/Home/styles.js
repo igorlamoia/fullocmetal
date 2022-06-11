@@ -1,10 +1,14 @@
 import styled from 'styled-components/native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { FlatList } from 'react-native';
+import LottieView from 'lottie-react-native';
+import NoConnection from '../../assets/lottie/no-connection.json';
 
 export const Container = styled.View`
 	flex: 1;
 	background-color: ${({ theme }) => theme.colors.background_primary};
+	align-items: center;
+	justify-content: center;
 `;
 
 export const Title = styled.Text`
@@ -43,3 +47,11 @@ export const FlatCars = styled(FlatList).attrs({
 	contentContainerStyle: { padding: 16 },
 	showsVerticalScrollIndicator: false,
 })``;
+
+export const NoConnectionSVG = styled(LottieView).attrs({
+	autoPlay: true,
+	loop: true,
+	source: NoConnection,
+})`
+	height: 150px;
+`;
