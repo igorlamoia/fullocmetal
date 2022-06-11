@@ -44,7 +44,7 @@ export const Details = () => {
 				<Header>
 					<BackButton onPress={handleGoBack} />
 				</Header>
-				<Slider imageUrl={car.photos} />
+				<Slider arrayUrl={car.photos} />
 				<Content>
 					<TextWrapper>
 						<CarDetails>
