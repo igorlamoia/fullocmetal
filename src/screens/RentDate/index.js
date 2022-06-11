@@ -10,7 +10,6 @@ import { generateInterval } from '../../components/Calendar/generateInterval';
 import { showDate } from '../../utils/format';
 import { onValue, ref } from 'firebase/database';
 import { db } from '../../config/config';
-import { useGlobalContext } from '../../hooks/useGlobalVariables';
 import { Spinner } from '../../components/Spinner';
 
 export const RentDate = () => {
@@ -22,7 +21,7 @@ export const RentDate = () => {
 	const [lastSelectedDate, setLastSelectedDate] = useState({});
 	const [selectedDate, setSelectedDate] = useState({});
 	const [rentalPeriod, setRentalPeriod] = useState({});
-	const { isLoading, setIsLoading } = useGlobalContext();
+	const [isLoading, setIsLoading] = useState(true);
 
 	const handleDayChange = (date) => {
 		// Se a pessoa quiser desmarcar a única data que escolheu
