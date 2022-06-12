@@ -1,13 +1,20 @@
 import React from 'react';
-import { StatusBar } from 'react-native';
+import { StatusBar, View } from 'react-native';
 import { BackButton } from '../../components/BackButton';
 import { InfoCard } from '../../components/InfoCard';
 import { Button } from '../../components/Button';
+import Animated, {
+	useSharedValue,
+	useAnimatedScrollHandler,
+	useAnimatedStyle,
+	interpolate,
+	Extrapolate,
+} from 'react-native-reanimated';
 
 import {
 	Container,
 	LineWrapper,
-	Header,
+	Carousel,
 	Brand,
 	Model,
 	Text,
@@ -17,7 +24,8 @@ import {
 	TextWrapper,
 	TextInfo,
 	ButtonBlock,
-	Content,
+	ContentScrollAnimated,
+	Header,
 } from './styles';
 import { Slider } from '../../components/Slider';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -37,6 +45,21 @@ export const Details = () => {
 		navigation.goBack();
 	};
 
+	const scrollY = useSharedValue(0);
+	const scrollHandler = useAnimatedScrollHandler((event) => {
+		scrollY.value = event.contentOffset.y;
+	});
+	const carouselStyleAnimation = useAnimatedStyle(() => {
+		return {
+			height: interpolate(scrollY.value, [0, 200], [200, 70], Extrapolate.CLAMP),
+		};
+	});
+	const sliderCarsAnimation = useAnimatedStyle(() => {
+		return {
+			opacity: interpolate(scrollY.value, [0, 100], [1, 0], Extrapolate.CLAMP),
+		};
+	});
+
 	return (
 		<>
 			<StatusBar barStyle="dark-content" translucent backgroundColor="transparent" />
@@ -44,8 +67,12 @@ export const Details = () => {
 				<Header>
 					<BackButton onPress={handleGoBack} />
 				</Header>
-				<Slider arrayUrl={car.photos} />
-				<Content>
+				<Carousel style={carouselStyleAnimation}>
+					<Animated.View style={[sliderCarsAnimation]}>
+						<Slider arrayUrl={car.photos} />
+					</Animated.View>
+				</Carousel>
+				<ContentScrollAnimated onScroll={scrollHandler} scrollEventThrottle={16}>
 					<TextWrapper>
 						<CarDetails>
 							<Brand>{car.brand}</Brand>
@@ -61,8 +88,14 @@ export const Details = () => {
 							<InfoCard key={item.name} svg={selectSvg(item.type)} description={item.name} />
 						))}
 					</LineWrapper>
-					<TextInfo>{car.about}</TextInfo>
-				</Content>
+					<TextInfo>
+						{car.about}
+						{car.about}
+						{car.about}
+						{car.about}
+						{car.about}
+					</TextInfo>
+				</ContentScrollAnimated>
 				<ButtonBlock>
 					{!!previus && <Button onPress={handleGoBack} title="Voltar" />}
 					{!previus && <Button onPress={handleChooseRentDate} title="Escolher periodo do aluguel" />}

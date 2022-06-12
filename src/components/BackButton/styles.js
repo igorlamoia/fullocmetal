@@ -6,4 +6,5 @@ export const Button = styled(BorderlessButton)`
 	position: absolute;
 	margin-top: ${getStatusBarHeight() + 24}px;
 	margin-left: 32px;
+	z-index: 1;
 `;
