@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import SvgLogo from '../../assets/logo_background_gray.svg';
 import SvgDone from '../../assets/done.svg';
-import { BackHandler, useWindowDimensions } from 'react-native';
+import { BackHandler } from 'react-native';
 import { Container, Text, Title, ButtonBlock } from './styles';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { Button } from '../../components/Button';
@@ -10,7 +10,6 @@ import { useNavigation } from '@react-navigation/native';
 
 export const RentComplete = () => {
 	const navigation = useNavigation();
-	const { width } = useWindowDimensions();
 	const theme = useTheme();
 
 	const handlePress = () => {
@@ -30,8 +29,8 @@ export const RentComplete = () => {
 
 	return (
 		<Container>
-			<SvgLogo width={width} />
-			<SvgDone width={RFValue(70)} height={RFValue(72)} />
+			<SvgLogo width={RFValue(200)} />
+			<SvgDone width={RFValue(70)} />
 			<Title>Carro alugado!</Title>
 			<Text>
 				Agora você só precisa ir {'\n'}

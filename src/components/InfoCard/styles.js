@@ -3,8 +3,8 @@ import styled from 'styled-components/native';
 
 export const Container = styled.View`
 	background-color: ${({ theme }) => theme.colors.background_primary};
-	width: 110px;
-	height: 92px;
+	width: 30%;
+	height: ${RFValue(92)}px;
 	align-items: center;
 	justify-content: center;
 

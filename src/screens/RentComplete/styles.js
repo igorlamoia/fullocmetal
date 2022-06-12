@@ -5,7 +5,7 @@ import styled from 'styled-components/native';
 export const Container = styled.View`
 	flex: 1;
 	background-color: ${({ theme }) => theme.colors.header};
-	justify-content: space-between;
+	justify-content: space-evenly;
 	align-items: center;
 	padding: ${getStatusBarHeight() + 20}px 0 80px;
 `;
@@ -14,15 +14,15 @@ export const Text = styled.Text`
 	color: ${({ theme }) => theme.colors.text_detail};
 	font-size: ${RFValue(15)}px;
 	text-align: center;
+	margin-top: 10px;
 `;
 export const Title = styled.Text`
 	text-align: center;
 	font-family: ${({ theme }) => theme.fonts.secondary_600};
 	color: ${({ theme }) => theme.colors.background_secondary};
 	font-size: ${RFValue(30)}px;
-	margin-top: 40px;
 `;
 export const ButtonBlock = styled.View`
-	margin-top: 80px;
+	margin-top: 50px;
 	width: 100px;
 `;

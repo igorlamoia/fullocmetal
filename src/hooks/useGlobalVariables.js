@@ -4,8 +4,13 @@ const GlobalContext = createContext({});
 
 export const GlobalContextProvidader = ({ children }) => {
 	const [isLoading, setIsLoading] = useState(false);
+	const [splashLoaded, setSplashLoaded] = useState(false);
 
-	return <GlobalContext.Provider value={{ isLoading, setIsLoading }}>{children}</GlobalContext.Provider>;
+	return (
+		<GlobalContext.Provider value={{ isLoading, setIsLoading, setSplashLoaded, splashLoaded }}>
+			{children}
+		</GlobalContext.Provider>
+	);
 };
 
 export const useGlobalContext = () => {
