@@ -4,7 +4,7 @@ import styled from 'styled-components/native';
 
 export const Container = styled(RectButton)`
 	width: 100%;
-	padding: 19px;
+	padding: 0 ${RFValue(10)}px;
 	height: ${RFValue(56)}px;
 	align-items: center;
 	justify-content: center;

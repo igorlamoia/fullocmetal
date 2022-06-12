@@ -9,6 +9,7 @@ import {
 	Container,
 	LineWrapper,
 	Header,
+	Carousel,
 	Brand,
 	Model,
 	Price,
@@ -24,6 +25,7 @@ import {
 	Line,
 	CalendarButton,
 	CalendarSelection,
+	ContentScrollAnimated,
 } from './styles';
 import { Slider } from '../../components/Slider';
 import { useTheme } from 'styled-components';
@@ -33,6 +35,13 @@ import { selectSvg } from '../../utils/selectSvg';
 import { priceReal } from '../../utils/format';
 import { ref, set } from 'firebase/database';
 import { db } from '../../config/config';
+import Animated, {
+	Extrapolate,
+	interpolate,
+	useAnimatedScrollHandler,
+	useAnimatedStyle,
+	useSharedValue,
+} from 'react-native-reanimated';
 
 export const RentDetailsScreen = () => {
 	const [isLoading, setIsLoading] = useState(false);
@@ -84,6 +93,21 @@ export const RentDetailsScreen = () => {
 		navigation.goBack();
 	};
 
+	const scrollY = useSharedValue(0);
+	const scrollHandler = useAnimatedScrollHandler((event) => {
+		scrollY.value = event.contentOffset.y;
+	});
+	const carouselStyleAnimation = useAnimatedStyle(() => {
+		return {
+			height: interpolate(scrollY.value, [0, 200], [200, 70], Extrapolate.CLAMP),
+		};
+	});
+	const sliderCarsAnimation = useAnimatedStyle(() => {
+		return {
+			opacity: interpolate(scrollY.value, [0, 100], [1, 0], Extrapolate.CLAMP),
+		};
+	});
+
 	return (
 		<>
 			<StatusBar barStyle="dark-content" translucent backgroundColor="transparent" />
@@ -91,8 +115,12 @@ export const RentDetailsScreen = () => {
 				<Header>
 					<BackButton onPress={handleGoBack} />
 				</Header>
-				<Slider arrayUrl={car.photos} />
-				<Content>
+				<Carousel style={carouselStyleAnimation}>
+					<Animated.View style={sliderCarsAnimation}>
+						<Slider arrayUrl={car.photos} />
+					</Animated.View>
+				</Carousel>
+				<ContentScrollAnimated onScroll={scrollHandler} scrollEventThrottle={16}>
 					<TextWrapper>
 						<CarDetails>
 							<Brand>{car.brand}</Brand>
@@ -135,7 +163,7 @@ export const RentDetailsScreen = () => {
 						</Column>
 						<Price color={theme.colors.success}>{totalPrice}</Price>
 					</TextWrapper>
-				</Content>
+				</ContentScrollAnimated>
 				<ButtonBlock>
 					{!previus && (
 						<Button

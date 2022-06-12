@@ -1,13 +1,15 @@
 import { RectButton } from 'react-native-gesture-handler';
 import { getBottomSpace, getStatusBarHeight } from 'react-native-iphone-x-helper';
+import Animated from 'react-native-reanimated';
 import { RFValue } from 'react-native-responsive-fontsize';
 import styled from 'styled-components/native';
 
-export const Content = styled.ScrollView.attrs({
+export const ContentScrollAnimated = styled(Animated.ScrollView).attrs({
 	contentContainerStyle: {
 		// flex: 1,
 		alignItems: 'center',
 		padding: 24,
+		paddingTop: getStatusBarHeight() + RFValue(115),
 	},
 	showsVerticalScrollIndicator: false,
 })`
@@ -29,8 +31,15 @@ export const TextBlock = styled.View`
 	padding: 24px;
 `;
 export const Header = styled.View`
+	height: ${getStatusBarHeight() + RFValue(45)}px;
+`;
+
+export const Carousel = styled(Animated.View)`
 	justify-content: center;
 	margin-top: ${getStatusBarHeight() + 24}px;
+	overflow: hidden;
+	position: absolute;
+	z-index: 1;
 `;
 
 export const ImgCar = styled.Image`
