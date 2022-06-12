@@ -68,7 +68,7 @@ export const Details = () => {
 					<BackButton onPress={handleGoBack} />
 				</Header>
 				<Carousel style={carouselStyleAnimation}>
-					<Animated.View style={[sliderCarsAnimation]}>
+					<Animated.View style={sliderCarsAnimation}>
 						<Slider arrayUrl={car.photos} />
 					</Animated.View>
 				</Carousel>
