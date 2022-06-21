@@ -10,6 +10,7 @@ import {
 	ModalHeader,
 	ModalText,
 	AnimatedContent,
+	CloseModal,
 } from './styles';
 import { Menu, MenuDivider } from 'react-native-material-menu';
 import { useNavigation } from '@react-navigation/native';
@@ -20,6 +21,7 @@ import { ref, remove } from 'firebase/database';
 import { db } from '../../../../config/config';
 import { useGlobalContext } from '../../../../hooks/useGlobalVariables';
 import Modal from 'react-native-modal';
+import { RectButton } from 'react-native-gesture-handler';
 
 const user = 'newUserkkk';
 
@@ -73,6 +75,10 @@ const MenuCarRented = ({ item }) => {
 		});
 	};
 
+	const handleCloseModal = () => {
+		setIsModalOpen(false);
+	};
+
 	return (
 		<>
 			<Car data={item.car} onPress={showMenu} />
@@ -87,11 +93,19 @@ const MenuCarRented = ({ item }) => {
 				</Menu>
 			</MenuView>
 
-			<Modal isVisible={isModalOpen} onBackdropPress={() => setIsModalOpen(false)} backdropOpacity={0.9}>
+			<Modal
+				isVisible={isModalOpen}
+				animationIn="fadeInUp"
+				animationInTiming={500}
+				onBackdropPress={handleCloseModal}
+				backdropOpacity={0.9}
+			>
 				<ModalContainer>
 					<ModalHeader>
 						<ModalTitle>Deseja realmente cancelar?</ModalTitle>
-						<Text>X</Text>
+						<RectButton onPress={handleCloseModal}>
+							<CloseModal />
+						</RectButton>
 					</ModalHeader>
 
 					<ModalText>Teremos outras oportunidades, lembre-se, aqui não tem burocracia!</ModalText>

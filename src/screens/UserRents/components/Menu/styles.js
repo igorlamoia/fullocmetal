@@ -4,6 +4,7 @@ import { GestureHandlerRootView, RectButton } from 'react-native-gesture-handler
 import { createElement } from 'react';
 import { MenuItem } from 'react-native-material-menu';
 import LottieView from 'lottie-react-native';
+import close from '../../../../assets/lottie/x.json';
 import Triste from '../../../../assets/lottie/sad-face.json';
 import { RFValue } from 'react-native-responsive-fontsize';
 import Animated, { FadeInDown } from 'react-native-reanimated';
@@ -24,6 +25,7 @@ export const ModalHeader = styled.View`
 	flex-direction: row;
 	justify-content: space-between;
 	margin-bottom: 20px;
+	align-items: center;
 `;
 
 export const ModalText = styled.Text`
@@ -69,6 +71,14 @@ export const MenuItemStyled = styled(MenuItem).attrs((props) => ({
 	},
 }))``;
 
+export const CloseModal = styled(LottieView).attrs({
+	source: close,
+	loop: true,
+	autoPlay: true,
+})`
+	height: ${({ altura }) => RFValue(altura ?? 60)}px;
+	width: ${({ largura }) => RFValue(largura ?? 60)}px;
+`;
 export const Tristinho = styled(LottieView).attrs({
 	source: Triste,
 	loop: true,
