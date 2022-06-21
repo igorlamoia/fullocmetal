@@ -1,6 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Car } from '../../../../components/Car';
-import { MenuView, MenuItemStyled, Options } from './styles';
+import {
+	MenuView,
+	MenuItemStyled,
+	Options,
+	Tristinho,
+	ModalContainer,
+	ModalTitle,
+	ModalHeader,
+	ModalText,
+	AnimatedContent,
+} from './styles';
 import { Menu, MenuDivider } from 'react-native-material-menu';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from 'styled-components';
@@ -9,7 +19,6 @@ import { Button } from '../../../../components/Button';
 import { ref, remove } from 'firebase/database';
 import { db } from '../../../../config/config';
 import { useGlobalContext } from '../../../../hooks/useGlobalVariables';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Modal from 'react-native-modal';
 
 const user = 'newUserkkk';
@@ -28,7 +37,7 @@ const MenuCarRented = ({ item }) => {
 		setVisible(true);
 	};
 
-	const handleFireBaseRemove = async (item) => {
+	const handleFireBaseRemove = async () => {
 		try {
 			setIsLoading(true);
 			await remove(ref(db, `schedules_bycars/${item.car.id}/${item.id_reserva}`));
@@ -40,18 +49,18 @@ const MenuCarRented = ({ item }) => {
 		}
 	};
 
-	const handleCancel = (item) => {
+	const handleCancel = () => {
 		hideMenu();
 		setIsModalOpen(true);
 		// item.id_reserva
 	};
 
-	const handleCarDetails = (car) => {
+	const handleCarDetails = () => {
 		hideMenu();
-		navigation.navigate('Details', { car, previus: 'UserRents' });
+		navigation.navigate('Details', { car: item.car, previus: 'UserRents' });
 	};
 
-	const handleRentDetails = (item) => {
+	const handleRentDetails = () => {
 		hideMenu();
 		navigation.navigate('RentDetailsScreen', {
 			car: item.car,
@@ -69,22 +78,28 @@ const MenuCarRented = ({ item }) => {
 			<Car data={item.car} onPress={showMenu} />
 			<MenuView>
 				<Menu visible={visible} anchor={<Options onPress={showMenu} />} onRequestClose={hideMenu}>
-					<MenuItemStyled onPress={() => handleCarDetails(item.car)}>Informaçõe do carro</MenuItemStyled>
-					<MenuItemStyled onPress={() => handleRentDetails(item)}>Detalhes da reserva</MenuItemStyled>
+					<MenuItemStyled onPress={handleCarDetails}>Informaçõe do carro</MenuItemStyled>
+					<MenuItemStyled onPress={handleRentDetails}>Detalhes da reserva</MenuItemStyled>
 					<MenuDivider />
-					<MenuItemStyled onPress={() => handleCancel(item)} pressColor={theme.colors.main}>
+					<MenuItemStyled onPress={handleCancel} pressColor={theme.colors.main}>
 						Cancelar Reserva
 					</MenuItemStyled>
 				</Menu>
 			</MenuView>
 
-			<Modal isVisible={isModalOpen} onBackdropPress={() => setIsModalOpen(false)}>
-				<GestureHandlerRootView style={{ backgroundColor: 'white', height: '50%' }}>
-					<Text>X</Text>
-					<Text>Deseja realmente cancelar?</Text>
-					<Text>Você pode editar a data agendada de acordo com sua </Text>
-					<Button title="Cancelar" isLoading={isLoading} onPress={() => handleFireBaseRemove(item)} />
-				</GestureHandlerRootView>
+			<Modal isVisible={isModalOpen} onBackdropPress={() => setIsModalOpen(false)} backdropOpacity={0.9}>
+				<ModalContainer>
+					<ModalHeader>
+						<ModalTitle>Deseja realmente cancelar?</ModalTitle>
+						<Text>X</Text>
+					</ModalHeader>
+
+					<ModalText>Teremos outras oportunidades, lembre-se, aqui não tem burocracia!</ModalText>
+					<AnimatedContent>
+						<Tristinho />
+					</AnimatedContent>
+					<Button title="Cancelar" isLoading={isLoading} onPress={handleFireBaseRemove} />
+				</ModalContainer>
 			</Modal>
 		</>
 	);
