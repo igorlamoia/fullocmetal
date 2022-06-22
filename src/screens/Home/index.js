@@ -1,10 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { Container, Header, TotalCars, HeaderContent, FlatCars, NoConnectionSVG } from './styles';
+import {
+	Container,
+	Header,
+	TotalCars,
+	HeaderContent,
+	FlatCars,
+	NoConnectionSVG,
+	ProfileImage,
+	ProfileWrapper,
+	HeaderWrapper,
+} from './styles';
 import Logo from '../../assets/logo.svg';
 import { Car } from '../../components/Car';
 import { useNavigation } from '@react-navigation/native';
-import { Alert } from 'react-native';
+import { Alert, View } from 'react-native';
 import { Spinner } from '../../components/Spinner';
 import { FloatingButton } from '../../components/FloatingButton/index.js';
 import { getDatabase, ref, child, get, onValue } from 'firebase/database';
@@ -15,7 +25,7 @@ import { useGlobalContext } from '../../hooks/useGlobalVariables';
 export const Home = () => {
 	const navigation = useNavigation();
 	const [data, setData] = useState([]);
-	const { isLoading, setIsLoading } = useGlobalContext();
+	const { isLoading, setIsLoading, userAuth } = useGlobalContext();
 
 	const fetchData = async () => {
 		try {
@@ -52,7 +62,12 @@ export const Home = () => {
 			<Header>
 				<HeaderContent>
 					<Logo width={RFValue(100)} height={RFValue(100)} />
-					<TotalCars>Total de carros: {data?.length}</TotalCars>
+					<HeaderWrapper>
+						<ProfileWrapper>
+							<ProfileImage source={{ uri: userAuth.photo }} />
+						</ProfileWrapper>
+						<TotalCars>Total de carros: {data?.length}</TotalCars>
+					</HeaderWrapper>
 				</HeaderContent>
 			</Header>
 			{isLoading && <Spinner />}

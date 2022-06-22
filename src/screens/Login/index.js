@@ -10,7 +10,7 @@ import { useGlobalContext } from '../../hooks/useGlobalVariables';
 // import { View } from 'react-native';
 
 const Login = ({ navigation }) => {
-	const { signInWithGoogle } = useGlobalContext();
+	const { signInWithGoogle, isLoading } = useGlobalContext();
 	return (
 		<>
 			<StatusBar barStyle="light-content" translucent backgroundColor="transparent" />
@@ -22,8 +22,9 @@ const Login = ({ navigation }) => {
 					<Description>Faça seu login com {'\n'}uma das contas abaixo</Description>
 				</Content>
 				<ButtonWrapper>
-					<LoginButton svg={SvgGoogle} title="Entrar com Google" onPress={signInWithGoogle} />
+					<LoginButton isLoading={isLoading} svg={SvgGoogle} title="Entrar com Google" onPress={signInWithGoogle} />
 					<LoginButton
+						isLoading={isLoading}
 						svg={SvgEmail}
 						title="Entrar com E-mail"
 						onPress={() => {

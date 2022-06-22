@@ -6,7 +6,7 @@ import * as AuthSession from 'expo-auth-session';
 const GlobalContext = createContext({});
 
 export const GlobalContextProvidader = ({ children }) => {
-	const [isLoading, setIsLoading] = useState(true);
+	const [isLoading, setIsLoading] = useState(false);
 	const [splashLoaded, setSplashLoaded] = useState(false);
 	const [userAuth, setUserAuth] = useState(false);
 

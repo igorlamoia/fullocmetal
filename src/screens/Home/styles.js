@@ -11,6 +11,28 @@ export const Container = styled.View`
 	justify-content: center;
 `;
 
+export const ProfileImage = styled.Image`
+	/* flex: 1; */
+	width: ${RFValue(30)}px;
+	height: ${RFValue(30)}px;
+	border-radius: ${RFValue(15)}px;
+`;
+
+export const ProfileWrapper = styled.View`
+	flex-direction: row;
+	align-content: flex-end;
+	justify-content: flex-end;
+	/* width: 100%; */
+	/* flex: 1; */
+`;
+
+export const HeaderWrapper = styled.View`
+	flex: 1;
+	height: 100%;
+	padding: ${RFValue(15)}px 0;
+	justify-content: space-evenly;
+`;
+
 export const Title = styled.Text`
 	color: ${({ theme }) => theme.colors.main};
 	font-family: ${({ theme }) => theme.fonts.primary_400};
@@ -41,6 +63,7 @@ export const TotalCars = styled.Text`
 	font-family: ${({ theme }) => theme.fonts.primary_400};
 	font-size: ${RFValue(15)}px;
 	color: ${({ theme }) => theme.colors.text_detail};
+	text-align: right;
 `;
 
 export const FlatCars = styled(FlatList).attrs({

@@ -82,7 +82,7 @@ const MenuCarRented = ({ item }) => {
 
 	return (
 		<>
-			<Car data={item.car} onPress={showMenu} />
+			<Car data={item.car} onPress={showMenu} key={item.key} />
 			<MenuView>
 				<Menu visible={visible} anchor={<Options onPress={showMenu} />} onRequestClose={hideMenu}>
 					<MenuItemStyled onPress={handleCarDetails}>Informaçõe do carro</MenuItemStyled>

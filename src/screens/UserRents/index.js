@@ -15,6 +15,8 @@ import {
 	NoCarsContainer,
 	Message,
 	NumberRents,
+	ProfileWrapper,
+	ProfileImage,
 } from './styles';
 import { useTheme } from 'styled-components';
 import { useNavigation } from '@react-navigation/native';
@@ -33,7 +35,7 @@ export const UserRents = () => {
 	const [rentedCars, setRentedCars] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const {
-		userAuth: { id },
+		userAuth: { id, photo },
 	} = useGlobalContext();
 
 	const handleGoBack = () => {
@@ -66,6 +68,9 @@ export const UserRents = () => {
 	return (
 		<Container>
 			<Header>
+				<ProfileWrapper>
+					<ProfileImage source={{ uri: photo }} />
+				</ProfileWrapper>
 				<BackButton onPress={handleGoBack} color={theme.colors.background_secondary} />
 				<Title>
 					Seus agendamentos, {'\n'}
