@@ -2,8 +2,10 @@ import React, { createContext, useContext, useEffect, useRef, useState } from 'r
 const { CLIENT_ID } = process.env;
 const { REDIRECT_URI } = process.env;
 import * as AuthSession from 'expo-auth-session';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const GlobalContext = createContext({});
+const USER_AUTH_DATA_KEY = '@fulloc-metal:user_id';
 
 export const GlobalContextProvidader = ({ children }) => {
 	const [isLoading, setIsLoading] = useState(false);
@@ -37,9 +39,8 @@ export const GlobalContextProvidader = ({ children }) => {
 					email: userInfo.email,
 					photo: userInfo.picture,
 				};
-				console.log(userLogged);
 				setUserAuth(userLogged);
-				// await AsyncStorage.setItem(storageUserKey, JSON.stringify(userLogged));
+				await AsyncStorage.setItem(USER_AUTH_DATA_KEY, JSON.stringify(userLogged));
 			}
 		} catch (error) {
 			console.log(error);
@@ -49,8 +50,28 @@ export const GlobalContextProvidader = ({ children }) => {
 		}
 	};
 
-	const LogOut = () => {
+	const automaticLogin = async () => {
+		setIsLoading(true);
+		try {
+			let user_data = await AsyncStorage.getItem(USER_AUTH_DATA_KEY);
+			if (!!user_data) {
+				user_data = JSON.parse(user_data);
+				return setUserAuth(user_data);
+			}
+		} catch (erro) {
+			console.log(erro);
+		} finally {
+			setIsLoading(false);
+		}
+	};
+
+	useEffect(() => {
+		automaticLogin();
+	}, []);
+
+	const LogOut = async () => {
 		setUserAuth(false);
+		await AsyncStorage.removeItem(USER_AUTH_DATA_KEY);
 	};
 
 	return (
