@@ -25,14 +25,16 @@ import { db } from '../../config/config';
 import { Spinner } from '../../components/Spinner';
 
 import { MenuCarRented } from './components/Menu';
-
-const user = 'newUserkkk';
+import { useGlobalContext } from '../../hooks/useGlobalVariables';
 
 export const UserRents = () => {
 	const theme = useTheme();
 	const navigation = useNavigation();
 	const [rentedCars, setRentedCars] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
+	const {
+		userAuth: { id },
+	} = useGlobalContext();
 
 	const handleGoBack = () => {
 		navigation.goBack();
@@ -41,7 +43,7 @@ export const UserRents = () => {
 	const getRentedCarsFromUser = () => {
 		try {
 			setIsLoading(true);
-			onValue(ref(db, `schedules_byuser/${user}`), (snapshot) => {
+			onValue(ref(db, `schedules_byuser/${id}`), (snapshot) => {
 				if (snapshot.exists()) {
 					const reservas = snapshot.val();
 					const arrayReservedCars = Object.values(reservas).map((reserva) => reserva);
@@ -81,7 +83,7 @@ export const UserRents = () => {
 					data={rentedCars}
 					renderItem={({ item }) => (
 						<>
-							<MenuCarRented item={item} />
+							<MenuCarRented item={item} key={(item) => item.id_reserva} />
 							<PeriodView>
 								<PeriodText>Periodo</PeriodText>
 								<DateWrapper>

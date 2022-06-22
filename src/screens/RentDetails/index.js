@@ -42,8 +42,11 @@ import Animated, {
 	useAnimatedStyle,
 	useSharedValue,
 } from 'react-native-reanimated';
-
+import { useGlobalContext } from '../../hooks/useGlobalVariables';
 export const RentDetailsScreen = () => {
+	const {
+		userAuth: { id },
+	} = useGlobalContext();
 	const [isLoading, setIsLoading] = useState(false);
 	const route = useRoute();
 	const { car, interval, previus } = route.params;
@@ -68,7 +71,7 @@ export const RentDetailsScreen = () => {
 			// db.ref('schedules_byuser').child(2).set(cadastro);
 			// await api.put(`schedules_bycars/${car.id}`, { id: car.id, unavailable_dates: interval.period });
 			// !ID do usuário aqui
-			const user = 'newUserkkk';
+			const user = id;
 			await set(ref(db, `schedules_bycars/${car.id}/${timestamp}`), {
 				unavailable_dates: interval.period,
 				user: user,

@@ -23,14 +23,15 @@ import { useGlobalContext } from '../../../../hooks/useGlobalVariables';
 import Modal from 'react-native-modal';
 import { RectButton } from 'react-native-gesture-handler';
 
-const user = 'newUserkkk';
-
 const MenuCarRented = ({ item }) => {
 	const theme = useTheme();
 	const navigation = useNavigation();
 	const [visible, setVisible] = useState(false);
 	const { isLoading, setIsLoading } = useGlobalContext();
 	const [isModalOpen, setIsModalOpen] = useState(false);
+	const {
+		userAuth: { id },
+	} = useGlobalContext();
 
 	const hideMenu = () => {
 		setVisible(false);
@@ -43,7 +44,7 @@ const MenuCarRented = ({ item }) => {
 		try {
 			setIsLoading(true);
 			await remove(ref(db, `schedules_bycars/${item.car.id}/${item.id_reserva}`));
-			await remove(ref(db, `schedules_byuser/${user}/${item.id_reserva}`));
+			await remove(ref(db, `schedules_byuser/${id}/${item.id_reserva}`));
 			setIsLoading(false);
 		} catch (erro) {
 			setIsLoading(false);
