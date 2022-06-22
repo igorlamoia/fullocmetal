@@ -16,17 +16,15 @@ import { useNavigation } from '@react-navigation/native';
 import { Alert, View } from 'react-native';
 import { Spinner } from '../../components/Spinner';
 import { FloatingButton } from '../../components/FloatingButton/index.js';
-import { getDatabase, ref, child, get, onValue } from 'firebase/database';
-// import firebase from '../../config/config';
+import { ref, child, get } from 'firebase/database';
 import { db } from '../../config/config';
-import { useGlobalContext } from '../../hooks/useGlobalVariables';
-
 import { ToogleMenu } from '../../components/ToogleMenu';
+import { Button } from '../../components/Button';
 
 export const Home = () => {
 	const navigation = useNavigation();
 	const [data, setData] = useState([]);
-	const { isLoading, setIsLoading, userAuth } = useGlobalContext();
+	const [isLoading, setIsLoading] = useState(true);
 
 	const fetchData = async () => {
 		try {
@@ -67,7 +65,7 @@ export const Home = () => {
 						<ProfileWrapper>
 							<ToogleMenu />
 						</ProfileWrapper>
-						<TotalCars>Total de carros: {data?.length}</TotalCars>
+						<TotalCars>{!isLoading && `Total de carros: ${data?.length}`}</TotalCars>
 					</HeaderWrapper>
 				</HeaderContent>
 			</Header>
@@ -79,7 +77,12 @@ export const Home = () => {
 				onRefresh={fetchData}
 				refreshing={false}
 			/>
-			{!isLoading && data.length === 0 && <NoConnectionSVG />}
+			{!isLoading && data.length === 0 && (
+				<>
+					<NoConnectionSVG />
+					<Button title="Tentar novamente" onPress={fetchData} />
+				</>
+			)}
 			<FloatingButton onPress={handleMyRents} />
 		</Container>
 	);

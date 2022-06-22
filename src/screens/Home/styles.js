@@ -6,6 +6,7 @@ import NoConnection from '../../assets/lottie/no-connection.json';
 
 export const Container = styled.View`
 	flex: 1;
+
 	background-color: ${({ theme }) => theme.colors.background_primary};
 	align-items: center;
 	justify-content: center;
@@ -75,6 +76,4 @@ export const NoConnectionSVG = styled(LottieView).attrs({
 	autoPlay: true,
 	loop: true,
 	source: NoConnection,
-})`
-	height: 150px;
-`;
+})``;
