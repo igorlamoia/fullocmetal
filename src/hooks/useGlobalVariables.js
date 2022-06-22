@@ -12,6 +12,13 @@ export const GlobalContextProvidader = ({ children }) => {
 
 	const signInWithGoogle = async () => {
 		try {
+			// ! para forçar resultados
+			// return setUserAuth({
+			// 	email: 'igorlamoia@gmail.com',
+			// 	id: '111726507287804207795',
+			// 	name: 'Igor',
+			// 	photo: 'https://lh3.googleusercontent.com/a-/AOh14GgJTxT9IUabvXLYwvYA6Djvf2CUAffr-DqwqqKhFiE=s96-c',
+			// });
 			setIsLoading(true);
 			const RESPONSE_TYPE = 'token';
 			const SCOPE = encodeURI('profile email');
@@ -30,6 +37,7 @@ export const GlobalContextProvidader = ({ children }) => {
 					email: userInfo.email,
 					photo: userInfo.picture,
 				};
+				console.log(userLogged);
 				setUserAuth(userLogged);
 				// await AsyncStorage.setItem(storageUserKey, JSON.stringify(userLogged));
 			}
@@ -41,9 +49,13 @@ export const GlobalContextProvidader = ({ children }) => {
 		}
 	};
 
+	const LogOut = () => {
+		setUserAuth(false);
+	};
+
 	return (
 		<GlobalContext.Provider
-			value={{ isLoading, setIsLoading, setSplashLoaded, splashLoaded, signInWithGoogle, userAuth }}
+			value={{ isLoading, setIsLoading, setSplashLoaded, splashLoaded, signInWithGoogle, userAuth, LogOut }}
 		>
 			{children}
 		</GlobalContext.Provider>

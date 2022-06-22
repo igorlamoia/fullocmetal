@@ -7,7 +7,6 @@ import {
 	HeaderContent,
 	FlatCars,
 	NoConnectionSVG,
-	ProfileImage,
 	ProfileWrapper,
 	HeaderWrapper,
 } from './styles';
@@ -21,6 +20,8 @@ import { getDatabase, ref, child, get, onValue } from 'firebase/database';
 // import firebase from '../../config/config';
 import { db } from '../../config/config';
 import { useGlobalContext } from '../../hooks/useGlobalVariables';
+
+import { ToogleMenu } from '../../components/ToogleMenu';
 
 export const Home = () => {
 	const navigation = useNavigation();
@@ -64,7 +65,7 @@ export const Home = () => {
 					<Logo width={RFValue(100)} height={RFValue(100)} />
 					<HeaderWrapper>
 						<ProfileWrapper>
-							<ProfileImage source={{ uri: userAuth.photo }} />
+							<ToogleMenu />
 						</ProfileWrapper>
 						<TotalCars>Total de carros: {data?.length}</TotalCars>
 					</HeaderWrapper>

@@ -16,7 +16,6 @@ import {
 	Message,
 	NumberRents,
 	ProfileWrapper,
-	ProfileImage,
 } from './styles';
 import { useTheme } from 'styled-components';
 import { useNavigation } from '@react-navigation/native';
@@ -28,6 +27,7 @@ import { Spinner } from '../../components/Spinner';
 
 import { MenuCarRented } from './components/Menu';
 import { useGlobalContext } from '../../hooks/useGlobalVariables';
+import { ToogleMenu } from '../../components/ToogleMenu';
 
 export const UserRents = () => {
 	const theme = useTheme();
@@ -69,7 +69,7 @@ export const UserRents = () => {
 		<Container>
 			<Header>
 				<ProfileWrapper>
-					<ProfileImage source={{ uri: photo }} />
+					<ToogleMenu />
 				</ProfileWrapper>
 				<BackButton onPress={handleGoBack} color={theme.colors.background_secondary} />
 				<Title>

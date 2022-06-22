@@ -5,13 +5,6 @@ import LottieView from 'lottie-react-native';
 import { FlatList } from 'react-native';
 import NoCars from '../../assets/lottie/empty-garage.json';
 
-export const ProfileImage = styled.Image`
-	/* flex: 1; */
-	width: ${RFValue(30)}px;
-	height: ${RFValue(30)}px;
-	border-radius: ${RFValue(15)}px;
-`;
-
 export const ProfileWrapper = styled.View`
 	flex-direction: row;
 	align-content: flex-end;
