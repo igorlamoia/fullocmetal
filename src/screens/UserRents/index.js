@@ -26,8 +26,9 @@ import { db } from '../../config/config';
 import { Spinner } from '../../components/Spinner';
 
 import { MenuCarRented } from './components/Menu';
-import { useGlobalContext } from '../../hooks/useGlobalVariables';
 import { ToogleMenu } from '../../components/ToogleMenu';
+import { useAuthContext } from '../../hooks/useAuth';
+import { useGlobalContext } from '../../hooks/useGlobalVariables';
 
 export const UserRents = () => {
 	const theme = useTheme();
@@ -36,7 +37,9 @@ export const UserRents = () => {
 	const [isLoading, setIsLoading] = useState(true);
 	const {
 		userAuth: { id, photo },
-	} = useGlobalContext();
+	} = useAuthContext();
+
+	const { showError } = useGlobalContext();
 
 	const handleGoBack = () => {
 		navigation.goBack();
@@ -56,7 +59,7 @@ export const UserRents = () => {
 				setIsLoading(false);
 			});
 		} catch (error) {
-			Alert.alert('Ops...', 'Algo de errado aconteceu');
+			showError('Falha de conexão, por favor, confira sua conexão e tente novamente.');
 			setIsLoading(false);
 		}
 	};
@@ -88,7 +91,7 @@ export const UserRents = () => {
 					data={rentedCars}
 					renderItem={({ item }) => (
 						<>
-							<MenuCarRented item={item} key={(item) => item.id_reserva} />
+							<MenuCarRented item={item} key={item.id_reserva} />
 							<PeriodView>
 								<PeriodText>Periodo</PeriodText>
 								<DateWrapper>

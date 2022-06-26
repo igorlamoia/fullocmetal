@@ -20,11 +20,13 @@ import { ref, child, get } from 'firebase/database';
 import { db } from '../../config/config';
 import { ToogleMenu } from '../../components/ToogleMenu';
 import { Button } from '../../components/Button';
+import { useGlobalContext } from '../../hooks/useGlobalVariables';
 
 export const Home = () => {
 	const navigation = useNavigation();
+	const { setFullocModal, setIsLoading, isLoading, showError } = useGlobalContext();
 	const [data, setData] = useState([]);
-	const [isLoading, setIsLoading] = useState(true);
+	// const [isLoading, setIsLoading] = useState(true);
 
 	const fetchData = async () => {
 		try {
@@ -34,11 +36,10 @@ export const Home = () => {
 			if (snapshot.exists()) {
 				setData(snapshot.val());
 			} else {
-				console.log('No data available');
+				showError('Nenhum dado para listar, provável falha de conexão');
 			}
 		} catch (error) {
-			console.log('Olha o erro:', error);
-			Alert.alert('Ops...');
+			showError('Falha de conexção! Por favor, confira sua conexão e tente novamente');
 		} finally {
 			setIsLoading(false);
 		}
@@ -87,3 +88,16 @@ export const Home = () => {
 		</Container>
 	);
 };
+
+// return setFullocModal({
+// 	isVisible: true,
+// 	onBackdropPress: () => setIsLoading(true),
+// 	justText: `
+// 	Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus minus esse cum. Assumenda porro blanditiis vitae culpa neque quisquam sapiente illum facilis saepe iste voluptatibus nostrum, corporis ullam? A, maiores.
+// 	Autem dolor deserunt enim doloremque cumque! Corporis nemo sapiente saepe animi deleniti harum pariatur! Eius iste corrupti accusantium repellat modi. Aut labore aspernatur ut quo quasi quae a, velit nemo.
+// 	Illum ducimus fuga eos voluptate aliquam corrupti dicta voluptatum voluptates sapiente deleniti. Tempora, culpa. Dolorum, nobis molestiae, officiis quos impedit consectetur ipsa itaque sit possimus dolorem quidem dolor inventore a!
+// 	`,
+// 	backgroundColor: 'white',
+// 	title: 'Iguim',
+// 	hasCloseIcon: true,
+// });

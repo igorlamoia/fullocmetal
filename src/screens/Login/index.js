@@ -7,10 +7,12 @@ import SvgGoogle from '../../assets/google-login.svg';
 import SvgEmail from '../../assets/email-login.svg';
 import { StatusBar } from 'react-native';
 import { useGlobalContext } from '../../hooks/useGlobalVariables';
+import { useAuthContext } from '../../hooks/useAuth';
 // import { View } from 'react-native';
 
 const Login = ({ navigation }) => {
-	const { signInWithGoogle, isLoading } = useGlobalContext();
+	const { signInWithGoogle } = useAuthContext();
+	const { isLoading } = useGlobalContext();
 	return (
 		<>
 			<StatusBar barStyle="light-content" translucent backgroundColor="transparent" />

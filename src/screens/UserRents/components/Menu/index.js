@@ -22,6 +22,7 @@ import { db } from '../../../../config/config';
 import { useGlobalContext } from '../../../../hooks/useGlobalVariables';
 import Modal from 'react-native-modal';
 import { RectButton } from 'react-native-gesture-handler';
+import { useAuthContext } from '../../../../hooks/useAuth';
 
 const MenuCarRented = ({ item }) => {
 	const theme = useTheme();
@@ -31,7 +32,7 @@ const MenuCarRented = ({ item }) => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const {
 		userAuth: { id },
-	} = useGlobalContext();
+	} = useAuthContext();
 
 	const hideMenu = () => {
 		setVisible(false);
@@ -85,10 +86,14 @@ const MenuCarRented = ({ item }) => {
 			<Car data={item.car} onPress={showMenu} key={item.key} />
 			<MenuView>
 				<Menu visible={visible} anchor={<Options onPress={showMenu} />} onRequestClose={hideMenu}>
-					<MenuItemStyled onPress={handleCarDetails}>Informaçõe do carro</MenuItemStyled>
-					<MenuItemStyled onPress={handleRentDetails}>Detalhes da reserva</MenuItemStyled>
+					<MenuItemStyled key={item.key + '1'} onPress={handleCarDetails}>
+						Informaçõe do carro
+					</MenuItemStyled>
+					<MenuItemStyled key={item.key + '2'} onPress={handleRentDetails}>
+						Detalhes da reserva
+					</MenuItemStyled>
 					<MenuDivider />
-					<MenuItemStyled onPress={handleCancel} pressColor={theme.colors.main}>
+					<MenuItemStyled key={item.key + '3'} onPress={handleCancel} pressColor={theme.colors.main}>
 						Cancelar Reserva
 					</MenuItemStyled>
 				</Menu>
@@ -113,7 +118,7 @@ const MenuCarRented = ({ item }) => {
 					<AnimatedContent>
 						<Tristinho />
 					</AnimatedContent>
-					<Button title="Cancelar" isLoading={isLoading} onPress={handleFireBaseRemove} />
+					<Button title="Confirmar" isLoading={isLoading} onPress={handleFireBaseRemove} />
 				</ModalContainer>
 			</Modal>
 		</>

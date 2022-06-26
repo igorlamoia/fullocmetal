@@ -11,6 +11,7 @@ import { showDate } from '../../utils/format';
 import { onValue, ref } from 'firebase/database';
 import { db } from '../../config/config';
 import { Spinner } from '../../components/Spinner';
+import { useGlobalContext } from '../../hooks/useGlobalVariables';
 
 export const RentDate = () => {
 	const route = useRoute();
@@ -22,6 +23,7 @@ export const RentDate = () => {
 	const [selectedDate, setSelectedDate] = useState({});
 	const [rentalPeriod, setRentalPeriod] = useState({});
 	const [isLoading, setIsLoading] = useState(true);
+	const { showError } = useGlobalContext();
 
 	const handleDayChange = (date) => {
 		// Se a pessoa quiser desmarcar a única data que escolheu
@@ -75,39 +77,37 @@ export const RentDate = () => {
 		try {
 			setIsLoading(true);
 			onValue(ref(db, `schedules_bycars/${car.id}`), (snapshot) => {
-				if (snapshot.exists()) {
-					let diasIndisponiveis = {};
-					Object.values(snapshot.val()).forEach(({ unavailable_dates }) => {
-						diasIndisponiveis = {
-							...diasIndisponiveis,
-							...unavailable_dates,
-						};
-					});
-					let diasIndisponiveisFormatado = {};
-					Object.values(diasIndisponiveis).forEach((day) => {
-						let novo = {};
-						novo[day] = {
-							marked: true,
-							disabled: true,
-							disableTouchEvent: true,
-							dotColor: 'red',
-						};
-						diasIndisponiveisFormatado = {
-							...diasIndisponiveisFormatado,
-							...novo,
-						};
-					});
-					setDiasBloqueados(diasIndisponiveisFormatado);
-					setIsLoading(false);
-				} else {
-					setIsLoading(false);
-					console.log('No data available');
+				if (!snapshot.exists()) {
+					return setIsLoading(false);
 				}
+				let diasIndisponiveis = {};
+				Object.values(snapshot.val()).forEach(({ unavailable_dates }) => {
+					diasIndisponiveis = {
+						...diasIndisponiveis,
+						...unavailable_dates,
+					};
+				});
+				let diasIndisponiveisFormatado = {};
+				Object.values(diasIndisponiveis).forEach((day) => {
+					let novo = {};
+					novo[day] = {
+						marked: true,
+						disabled: true,
+						disableTouchEvent: true,
+						dotColor: 'red',
+					};
+					diasIndisponiveisFormatado = {
+						...diasIndisponiveisFormatado,
+						...novo,
+					};
+				});
+				setDiasBloqueados(diasIndisponiveisFormatado);
+				setIsLoading(false);
 			});
 		} catch (error) {
-			console.log('Olha o erro:', error);
-			Alert.alert('Ops...');
-			etIsLoading(false);
+			showError('Falha de conexão, por favor, tente novamente');
+			setIsLoading(false);
+			navigation.goBack();
 		} finally {
 			// setIsLoading(false);
 		}

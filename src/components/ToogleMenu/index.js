@@ -3,12 +3,11 @@ import Animated, { interpolate, useAnimatedStyle, useSharedValue, withTiming } f
 import { BorderlessButton } from 'react-native-gesture-handler';
 
 import { Close, Logout, ProfileImage, ToogleWrapper } from './styles';
-import { useGlobalContext } from '../../hooks/useGlobalVariables';
+import { useAuthContext } from '../../hooks/useAuth';
 
 export const ToogleMenu = () => {
-	const { userAuth, LogOut } = useGlobalContext();
+	const { userAuth, LogOut } = useAuthContext();
 	const profileOptionsOpenRef = React.useRef(false);
-
 	const profileOptionsWidth = useSharedValue(0);
 	const closeOptionOpacity = useSharedValue(0);
 
@@ -25,7 +24,9 @@ export const ToogleMenu = () => {
 
 	const closeOptionStyle = useAnimatedStyle(() => ({
 		width: profileOptionsWidth.value,
-		opacity: interpolate(closeOptionOpacity.value, [0, 20, 30], [0, 0.1, 1]),
+		opacity: interpolate(closeOptionOpacity.value, [0, 20, 30], [0, 0.3, 1]),
+		marginRight: profileOptionsWidth.value / 3,
+		marginLeft: !!profileOptionsOpenRef.current ? 20 : 0,
 	}));
 
 	const handleLogout = () => {
@@ -35,7 +36,7 @@ export const ToogleMenu = () => {
 	return (
 		<BorderlessButton onPress={handleProfileOptions}>
 			<ToogleWrapper>
-				<Animated.View style={[closeOptionStyle, { marginRight: 5, marginLeft: 2 }]}>
+				<Animated.View style={[closeOptionStyle]}>
 					<BorderlessButton onPress={handleLogout}>
 						<Logout />
 					</BorderlessButton>

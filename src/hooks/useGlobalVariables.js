@@ -1,82 +1,42 @@
-import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
-const { CLIENT_ID } = process.env;
-const { REDIRECT_URI } = process.env;
-import * as AuthSession from 'expo-auth-session';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { createContext, useContext, useState } from 'react';
 
 const GlobalContext = createContext({});
-const USER_AUTH_DATA_KEY = '@fulloc-metal:user_id';
 
-export const GlobalContextProvidader = ({ children }) => {
+export const GlobalContextProvider = ({ children }) => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [splashLoaded, setSplashLoaded] = useState(false);
-	const [userAuth, setUserAuth] = useState(false);
+	const [globalMessage, setGlobalMessage] = useState({ visible: false });
+	const [fullocModal, setFullocModal] = useState({});
 
-	const signInWithGoogle = async () => {
-		try {
-			// ! para forçar resultados
-			// return setUserAuth({
-			// 	email: 'igorlamoia@gmail.com',
-			// 	id: '111726507287804207795',
-			// 	name: 'Igor',
-			// 	photo: 'https://lh3.googleusercontent.com/a-/AOh14GgJTxT9IUabvXLYwvYA6Djvf2CUAffr-DqwqqKhFiE=s96-c',
-			// });
-			setIsLoading(true);
-			const RESPONSE_TYPE = 'token';
-			const SCOPE = encodeURI('profile email');
-
-			const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}&scope=${SCOPE}`;
-
-			const { type, params } = await AuthSession.startAsync({ authUrl });
-			if (type === 'success') {
-				const response = await fetch(
-					`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${params.access_token}`
-				);
-				const userInfo = await response.json();
-				const userLogged = {
-					id: userInfo.id,
-					name: userInfo.given_name,
-					email: userInfo.email,
-					photo: userInfo.picture,
-				};
-				setUserAuth(userLogged);
-				await AsyncStorage.setItem(USER_AUTH_DATA_KEY, JSON.stringify(userLogged));
-			}
-		} catch (error) {
-			console.log(error);
-			throw new Error(error);
-		} finally {
-			setIsLoading(false);
-		}
+	const showError = (message) => {
+		setGlobalMessage({ visible: true, type: 'error', title: 'Ops... Algo de errado aconteceu', message });
+	};
+	const showWarning = (message) => {
+		setGlobalMessage({ visible: true, type: 'warning', title: 'Alerta!', message });
+	};
+	const showSuccess = (message) => {
+		setGlobalMessage({ visible: true, type: 'success', title: 'Sucesso!', message });
 	};
 
-	const automaticLogin = async () => {
-		setIsLoading(true);
-		try {
-			let user_data = await AsyncStorage.getItem(USER_AUTH_DATA_KEY);
-			if (!!user_data) {
-				user_data = JSON.parse(user_data);
-				return setUserAuth(user_data);
-			}
-		} catch (erro) {
-			console.log(erro);
-		} finally {
-			setIsLoading(false);
-		}
-	};
-
-	useEffect(() => {
-		automaticLogin();
-	}, []);
-
-	const LogOut = async () => {
-		setUserAuth(false);
-		await AsyncStorage.removeItem(USER_AUTH_DATA_KEY);
+	const clearShowMessage = () => {
+		setGlobalMessage({ visible: false });
 	};
 
 	return (
 		<GlobalContext.Provider
-			value={{ isLoading, setIsLoading, setSplashLoaded, splashLoaded, signInWithGoogle, userAuth, LogOut }}
+			value={{
+				isLoading,
+				setIsLoading,
+				setSplashLoaded,
+				splashLoaded,
+				setFullocModal,
+				globalMessage,
+				setGlobalMessage,
+				showError,
+				showWarning,
+				showSuccess,
+				clearShowMessage,
+			}}
 		>
 			{children}
 		</GlobalContext.Provider>

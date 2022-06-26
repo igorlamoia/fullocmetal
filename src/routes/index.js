@@ -6,9 +6,12 @@ import { useFonts, Inter_400Regular, Inter_500Medium } from '@expo-google-fonts/
 import { Archivo_400Regular, Archivo_500Medium, Archivo_600SemiBold } from '@expo-google-fonts/archivo';
 import { useGlobalContext } from '../hooks/useGlobalVariables';
 import { AppRoutes } from './app.routes';
+import { FullocModal } from '../components/FullocModal';
+import { useAuthContext } from '../hooks/useAuth';
 
 export const Routes = () => {
-	const { splashLoaded, userAuth } = useGlobalContext();
+	const { userAuth } = useAuthContext();
+	const { splashLoaded, fullocModal } = useGlobalContext();
 
 	let [fontsLoaded] = useFonts({
 		Inter_400Regular,
@@ -21,5 +24,10 @@ export const Routes = () => {
 	if (!fontsLoaded || !splashLoaded) {
 		return <Splash />;
 	}
-	return <NavigationContainer>{!!userAuth ? <AuthRoutes /> : <AppRoutes />}</NavigationContainer>;
+	return (
+		<NavigationContainer>
+			{!!userAuth ? <AuthRoutes /> : <AppRoutes />}
+			<FullocModal {...fullocModal} />
+		</NavigationContainer>
+	);
 };

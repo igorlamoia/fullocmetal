@@ -16,6 +16,9 @@ export default {
 		main_light: '#fdedef',
 
 		success: '#03b252',
+		error: '#f44336',
+		warning: '#ff9800',
+		info: '#0085d3',
 
 		shape: '#e1e1e8',
 		shape_dark: '#29292e',
