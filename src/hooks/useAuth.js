@@ -10,7 +10,7 @@ const USER_AUTH_DATA_KEY = '@fulloc-metal:user_id';
 
 export const AuthProvider = ({ children }) => {
 	const [userAuth, setUserAuth] = useState(false);
-	const { setIsLoading } = useGlobalContext();
+	const { setIsLoading, showError } = useGlobalContext();
 
 	const signInWithGoogle = async () => {
 		try {
@@ -39,12 +39,14 @@ export const AuthProvider = ({ children }) => {
 					email: userInfo.email,
 					photo: userInfo.picture,
 				};
+				if (!userLogged.id) {
+					throw Error('Falha ao conectar com conta google, por favor, tente novamente!');
+				}
 				setUserAuth(userLogged);
 				await AsyncStorage.setItem(USER_AUTH_DATA_KEY, JSON.stringify(userLogged));
 			}
 		} catch (error) {
-			console.log(error);
-			throw new Error(error);
+			showError(error.message);
 		} finally {
 			setIsLoading(false);
 		}

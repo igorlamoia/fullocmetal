@@ -15,6 +15,7 @@ import { ContextProviderWrapper } from './src/hooks';
 if (__DEV__) {
 	import('./ReactotronConfig').then(() => console.log('Reactotron Configured'));
 }
+console.disableYellowBox = true;
 
 export default function App() {
 	return (
