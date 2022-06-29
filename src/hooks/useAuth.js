@@ -4,6 +4,7 @@ const { REDIRECT_URI } = process.env;
 import * as AuthSession from 'expo-auth-session';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useGlobalContext } from './useGlobalVariables';
+import { getAuth, signOut } from 'firebase/auth';
 
 const AuthContext = createContext({});
 const USER_AUTH_DATA_KEY = '@fulloc-metal:user_id';
@@ -72,6 +73,19 @@ export const AuthProvider = ({ children }) => {
 	}, []);
 
 	const LogOut = async () => {
+		const auth = getAuth();
+		const user = auth.currentUser;
+		if (!!user) {
+			signOut(auth)
+				.then(() => {
+					// Sign-out successful.
+				})
+				.catch((error) => {
+					showError('Falha ao sair');
+					// An error happened.
+				});
+		}
+
 		setUserAuth(false);
 		await AsyncStorage.removeItem(USER_AUTH_DATA_KEY);
 	};
@@ -82,6 +96,7 @@ export const AuthProvider = ({ children }) => {
 				signInWithGoogle,
 				userAuth,
 				LogOut,
+				setUserAuth,
 			}}
 		>
 			{children}

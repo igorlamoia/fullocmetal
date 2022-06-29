@@ -30,7 +30,7 @@ const Login = ({ navigation }) => {
 						svg={SvgEmail}
 						title="Entrar com E-mail"
 						onPress={() => {
-							navigation.navigate('Home');
+							navigation.navigate('SignIn');
 						}}
 					/>
 				</ButtonWrapper>
