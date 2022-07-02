@@ -38,11 +38,12 @@ export const Alert = () => {
 				flexDirection: 'row',
 			}}
 			errorImageSrc={sadBad}
+			successImageSrc={{}}
 			successColor={theme.colors.success}
 			infoColor={theme.colors.info}
 			warnColor={theme.colors.warning}
 			errorColor={theme.colors.error}
-			imageStyle={{ width: 100, height: 100, alignSelf: 'center', resizeMode: 'contain' }}
+			imageStyle={{ alignSelf: 'center', resizeMode: 'contain' }}
 		/>
 	);
 };

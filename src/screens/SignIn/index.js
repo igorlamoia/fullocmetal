@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Text, TextInput } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { Keyboard, KeyboardAvoidingView, ScrollView, Text, TextInput } from 'react-native';
 import Modal from 'react-native-modal';
 import { Button } from '../../components/Button';
 import {
@@ -8,31 +8,48 @@ import {
 	signInWithEmailAndPassword,
 	sendPasswordResetEmail,
 } from 'firebase/auth';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { GestureHandlerRootView, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import {
+	BackWrapper,
+	ButtonContainer,
 	ButtonLink,
+	ButtonWrapper,
 	Container,
+	EmailButton,
 	Form,
 	Input,
+	InputWrapper,
 	Label,
 	LabelLink,
 	LogoWrapper,
 	ModalContainer,
 	ModalContent,
+	PasswordButton,
+	PasswordShowButton,
+	SubTitle,
+	Title,
 } from './styles';
 import { useAuthContext } from '../../hooks/useAuth';
 import { useGlobalContext } from '../../hooks/useGlobalVariables';
 import Logo from '../../assets/logo.svg';
+import { useTheme } from 'styled-components';
+import { BackButton } from '../../components/BackButton';
 
 export const SignIn = ({ navigation }) => {
 	const [email, setEmail] = useState('');
+	const emailRef = useRef(null);
 	const [password, setPassword] = useState('');
+	const passwordRef = useRef(null);
+	const [isFocuedEmail, setIsFocuedEmail] = useState(false);
+	const [isFocuedPassword, setIsFocuedPassword] = useState(false);
+
 	const [toogleModal, setToogleModal] = useState(false);
 	const { setUserAuth } = useAuthContext();
 	const { showSuccess, showError } = useGlobalContext();
+	const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
 	const createUserOnFirebase = async () => {
-		console.log('chamando');
+		// console.log('chamando');
 		const auth = getAuth();
 		createUserWithEmailAndPassword(auth, email, password)
 			.then((userCredential) => {
@@ -92,26 +109,95 @@ export const SignIn = ({ navigation }) => {
 		setToogleModal(false);
 	};
 
+	const theme = useTheme();
+
+	const emailFocus = () => {
+		emailRef?.current?.focus();
+		setIsFocuedEmail(true);
+	};
+	const passwordFocus = () => {
+		passwordRef?.current?.focus();
+		setIsFocuedPassword(true);
+	};
+	const removeFocusEmail = () => {
+		setIsFocuedEmail(false);
+	};
+	const removeFocusPassword = () => {
+		setIsFocuedPassword(false);
+	};
+
 	return (
 		<>
-			<Container>
-				<Form>
-					<LogoWrapper>
+			<ScrollView contentContainerStyle={{}} showsVerticalScrollIndicator={false}>
+				<BackButton onPress={() => navigation.goBack()} />
+				<KeyboardAvoidingView behavior="position">
+					<Container>
+						<Title>Estamos {'\n'}quase lá.</Title>
+						<SubTitle>
+							Faça seu login para começar{'\n'}
+							uma experiência incrível.
+						</SubTitle>
+						<Form>
+							{/* <LogoWrapper>
 						<Logo height={150} width={150} />
-					</LogoWrapper>
-					<Label>E-mail:</Label>
-					<Input placeholder="E-mail" value={email} onChangeText={setEmail} />
-					<Label>Senha:</Label>
-					<Input placeholder="Senha" value={password} onChangeText={setPassword} />
-					<Button title="Entrar" onPress={signInWithFirebase} />
-					<ButtonLink onPress={openModal}>
-						<LabelLink>Cadastrar</LabelLink>
-					</ButtonLink>
-					<ButtonLink onPress={forgotPassword}>
-						<LabelLink>Esqueci Senha</LabelLink>
-					</ButtonLink>
-				</Form>
-			</Container>
+					</LogoWrapper> */}
+
+							<InputWrapper>
+								{/* <Label>E-mail:</Label> */}
+								<EmailButton focused={isFocuedEmail || !!email} key={'email'} onPress={emailFocus} />
+								<Input
+									focused={isFocuedEmail}
+									onBlur={removeFocusEmail}
+									onFocus={emailFocus}
+									placeholder="E-mail"
+									keyboardType="email-address"
+									value={email}
+									autoCorrect={false}
+									autoCapitalize="none"
+									onChangeText={setEmail}
+									ref={emailRef}
+								/>
+							</InputWrapper>
+							<InputWrapper>
+								{/* <Label>Senha:</Label> */}
+								<PasswordButton focused={isFocuedPassword || !!password} key={'senha'} onPress={passwordFocus} />
+								<Input
+									focused={isFocuedPassword}
+									onBlur={removeFocusPassword}
+									onFocus={passwordFocus}
+									secureTextEntry={isPasswordVisible}
+									placeholder="Senha"
+									value={password}
+									onChangeText={setPassword}
+									ref={passwordRef}
+									autoCapitalize="none"
+								/>
+								<PasswordShowButton
+									focused={isFocuedPassword}
+									show={isPasswordVisible}
+									onPress={() => setIsPasswordVisible(!isPasswordVisible)}
+								/>
+							</InputWrapper>
+							<ButtonLink onPress={forgotPassword}>
+								<LabelLink>Esqueci Senha</LabelLink>
+							</ButtonLink>
+							<ButtonContainer>
+								<ButtonWrapper>
+									<Button title="Entrar" onPress={signInWithFirebase} />
+								</ButtonWrapper>
+								<ButtonWrapper>
+									<Button
+										titleColor={theme.colors.title}
+										title="Criar conta gratuita"
+										onPress={() => navigation.navigate('CreateUser')}
+										color={theme.colors.background_secondary}
+									/>
+								</ButtonWrapper>
+							</ButtonContainer>
+						</Form>
+					</Container>
+				</KeyboardAvoidingView>
+			</ScrollView>
 			<Modal
 				isVisible={toogleModal}
 				onBackdropPress={closeModal}
@@ -126,17 +212,17 @@ export const SignIn = ({ navigation }) => {
 					borderRadius: 20,
 				}}
 			>
-				<ModalContainer>
-					<ModalContent>
-						<Text>Digite seu e-mail:</Text>
-						<TextInput placeholder="E-mail" value={email} onChangeText={setEmail} />
-						<Text>Digite seu e-mail:</Text>
-						<TextInput placeholder="Senha" value={password} onChangeText={setPassword} />
-						<GestureHandlerRootView>
+				<GestureHandlerRootView>
+					<ModalContainer>
+						<ModalContent>
+							<Text>Digite seu e-mail:</Text>
+							<TextInput placeholder="E-mail" value={email} onChangeText={setEmail} />
+							<Text>Digite seu e-mail:</Text>
+							<TextInput placeholder="Senha" value={password} onChangeText={setPassword} />
 							<Button title="Cadastrar" onPress={createUserOnFirebase} />
-						</GestureHandlerRootView>
-					</ModalContent>
-				</ModalContainer>
+						</ModalContent>
+					</ModalContainer>
+				</GestureHandlerRootView>
 			</Modal>
 		</>
 	);

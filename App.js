@@ -1,7 +1,7 @@
 import 'intl';
 import 'intl/locale-data/jsonp/pt-BR';
 
-import { StatusBar } from 'react-native';
+import { LogBox, StatusBar } from 'react-native';
 import React from 'react';
 import theme from './src/styles/theme';
 
@@ -15,7 +15,8 @@ import { ContextProviderWrapper } from './src/hooks';
 if (__DEV__) {
 	import('./ReactotronConfig').then(() => console.log('Reactotron Configured'));
 }
-console.disableYellowBox = true;
+// console.disableYellowBox = true;
+LogBox.ignoreAllLogs(true);
 
 export default function App() {
 	return (
