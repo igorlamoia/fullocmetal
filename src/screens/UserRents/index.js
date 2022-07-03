@@ -15,6 +15,7 @@ import {
 	NoCarsContainer,
 	Message,
 	NumberRents,
+	ProfileWrapper,
 } from './styles';
 import { useTheme } from 'styled-components';
 import { useNavigation } from '@react-navigation/native';
@@ -25,14 +26,20 @@ import { db } from '../../config/config';
 import { Spinner } from '../../components/Spinner';
 
 import { MenuCarRented } from './components/Menu';
-
-const user = 'newUserkkk';
+import { ToogleMenu } from '../../components/ToogleMenu';
+import { useAuthContext } from '../../hooks/useAuth';
+import { useGlobalContext } from '../../hooks/useGlobalVariables';
 
 export const UserRents = () => {
 	const theme = useTheme();
 	const navigation = useNavigation();
 	const [rentedCars, setRentedCars] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
+	const {
+		userAuth: { id, photo },
+	} = useAuthContext();
+
+	const { showError } = useGlobalContext();
 
 	const handleGoBack = () => {
 		navigation.goBack();
@@ -41,7 +48,7 @@ export const UserRents = () => {
 	const getRentedCarsFromUser = () => {
 		try {
 			setIsLoading(true);
-			onValue(ref(db, `schedules_byuser/${user}`), (snapshot) => {
+			onValue(ref(db, `schedules_byuser/${id}`), (snapshot) => {
 				if (snapshot.exists()) {
 					const reservas = snapshot.val();
 					const arrayReservedCars = Object.values(reservas).map((reserva) => reserva);
@@ -52,7 +59,7 @@ export const UserRents = () => {
 				setIsLoading(false);
 			});
 		} catch (error) {
-			Alert.alert('Ops...', 'Algo de errado aconteceu');
+			showError('Falha de conexão, por favor, confira sua conexão e tente novamente.');
 			setIsLoading(false);
 		}
 	};
@@ -64,6 +71,9 @@ export const UserRents = () => {
 	return (
 		<Container>
 			<Header>
+				<ProfileWrapper>
+					<ToogleMenu />
+				</ProfileWrapper>
 				<BackButton onPress={handleGoBack} color={theme.colors.background_secondary} />
 				<Title>
 					Seus agendamentos, {'\n'}
@@ -81,7 +91,7 @@ export const UserRents = () => {
 					data={rentedCars}
 					renderItem={({ item }) => (
 						<>
-							<MenuCarRented item={item} />
+							<MenuCarRented item={item} key={item.id_reserva} />
 							<PeriodView>
 								<PeriodText>Periodo</PeriodText>
 								<DateWrapper>

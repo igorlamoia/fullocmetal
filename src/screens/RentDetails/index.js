@@ -42,8 +42,13 @@ import Animated, {
 	useAnimatedStyle,
 	useSharedValue,
 } from 'react-native-reanimated';
-
+import { useAuthContext } from '../../hooks/useAuth';
+import { useGlobalContext } from '../../hooks/useGlobalVariables';
 export const RentDetailsScreen = () => {
+	const {
+		userAuth: { id },
+	} = useAuthContext();
+	const { showError } = useGlobalContext();
 	const [isLoading, setIsLoading] = useState(false);
 	const route = useRoute();
 	const { car, interval, previus } = route.params;
@@ -64,11 +69,7 @@ export const RentDetailsScreen = () => {
 				id_reserva: timestamp,
 			};
 			setIsLoading(true);
-			// await api.post(`schedules_byuser`, { user_id: 1, car, startDate: interval.start, endDate: interval.end });
-			// db.ref('schedules_byuser').child(2).set(cadastro);
-			// await api.put(`schedules_bycars/${car.id}`, { id: car.id, unavailable_dates: interval.period });
-			// !ID do usuário aqui
-			const user = 'newUserkkk';
+			const user = id;
 			await set(ref(db, `schedules_bycars/${car.id}/${timestamp}`), {
 				unavailable_dates: interval.period,
 				user: user,
@@ -78,13 +79,12 @@ export const RentDetailsScreen = () => {
 				...novoAluguel,
 			});
 
+			setIsLoading(false);
 			navigation.navigate('RentComplete');
 		} catch (error) {
-			// console.log('aa', error);
 			setIsLoading(false);
-			Alert.alert(
-				'Ops... Algo de errado aconteceu',
-				'Não foi possível reservar o seu carro, por favor, tente novamente mais tarde ou contate nosso suporte, caso o erro persista.'
+			showError(
+				'Não foi possível reservar o seu carro, por favor, tente novamente mais tarde ou contate nosso suporte.'
 			);
 		}
 	};

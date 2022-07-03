@@ -10,14 +10,13 @@ import Login from '../screens/Login';
 
 const { Navigator, Screen } = createNativeStackNavigator();
 
-export const StackRoutes = () => {
+export const AuthRoutes = () => {
 	return (
 		<Navigator
 			screenOptions={{
 				headerShown: false,
 			}}
 		>
-			<Screen name="Login" component={Login} />
 			<Screen name="Home" component={Home} />
 			<Screen name="Details" component={Details} />
 			<Screen name="RentDate" component={RentDate} />

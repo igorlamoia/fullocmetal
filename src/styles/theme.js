@@ -14,8 +14,12 @@ export default {
 
 		main: '#CE0000',
 		main_light: '#fdedef',
+		disabled: '#fe8f8f',
 
 		success: '#03b252',
+		error: '#f44336',
+		warning: '#ff9800',
+		info: '#0085d3',
 
 		shape: '#e1e1e8',
 		shape_dark: '#29292e',

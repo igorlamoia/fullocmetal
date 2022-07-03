@@ -1,14 +1,18 @@
 import React from 'react';
+import { CarSpinner } from '../Spinner/styles';
 
-import { Container, Title, LogoWrapper } from './styles';
+import { Container, Title, LogoWrapper, Content } from './styles';
 
-const LoginButton = ({ svg: Svg, title, ...rest }) => {
+const LoginButton = ({ svg: Svg, title, isLoading, ...rest }) => {
 	return (
-		<Container {...rest}>
+		<Container {...rest} enabled={!isLoading}>
 			<LogoWrapper>
 				<Svg />
 			</LogoWrapper>
-			<Title>{title}</Title>
+			<Content>
+				{isLoading && <CarSpinner size={20} />}
+				<Title isLoading>{title}</Title>
+			</Content>
 		</Container>
 	);
 };

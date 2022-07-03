@@ -1,7 +1,8 @@
 {
   "expo": {
     "name": "fullocmetal",
-    "slug": "fullocmetal",
+    "slug": "fulloc-metal",
+    "scheme": "fulloc-metal",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

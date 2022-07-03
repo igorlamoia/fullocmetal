@@ -6,9 +6,13 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import SvgGoogle from '../../assets/google-login.svg';
 import SvgEmail from '../../assets/email-login.svg';
 import { StatusBar } from 'react-native';
+import { useGlobalContext } from '../../hooks/useGlobalVariables';
+import { useAuthContext } from '../../hooks/useAuth';
 // import { View } from 'react-native';
 
 const Login = ({ navigation }) => {
+	const { signInWithGoogle } = useAuthContext();
+	const { isLoading } = useGlobalContext();
 	return (
 		<>
 			<StatusBar barStyle="light-content" translucent backgroundColor="transparent" />
@@ -20,18 +24,13 @@ const Login = ({ navigation }) => {
 					<Description>Faça seu login com {'\n'}uma das contas abaixo</Description>
 				</Content>
 				<ButtonWrapper>
+					<LoginButton isLoading={isLoading} svg={SvgGoogle} title="Entrar com Google" onPress={signInWithGoogle} />
 					<LoginButton
-						svg={SvgGoogle}
-						title="Entrar com Google"
-						onPress={() => {
-							navigation.navigate('Home');
-						}}
-					/>
-					<LoginButton
+						isLoading={isLoading}
 						svg={SvgEmail}
 						title="Entrar com E-mail"
 						onPress={() => {
-							navigation.navigate('Home');
+							navigation.navigate('SignIn');
 						}}
 					/>
 				</ButtonWrapper>
