@@ -1,14 +1,6 @@
 import React, { useRef, useState } from 'react';
-import { Keyboard, KeyboardAvoidingView, ScrollView, Text, TextInput } from 'react-native';
-import Modal from 'react-native-modal';
+import { KeyboardAvoidingView, ScrollView, StatusBar } from 'react-native';
 import { Button } from '../../components/Button';
-import {
-	getAuth,
-	createUserWithEmailAndPassword,
-	signInWithEmailAndPassword,
-	sendPasswordResetEmail,
-} from 'firebase/auth';
-import { GestureHandlerRootView, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import {
 	BackWrapper,
 	ButtonContainer,
@@ -19,13 +11,11 @@ import {
 	Form,
 	Input,
 	InputWrapper,
-	Label,
 	LabelLink,
 	LogoWrapper,
-	ModalContainer,
-	ModalContent,
 	PasswordButton,
 	PasswordShowButton,
+	RoadContainer,
 	SubTitle,
 	Title,
 } from './styles';
@@ -34,6 +24,8 @@ import { useGlobalContext } from '../../hooks/useGlobalVariables';
 import Logo from '../../assets/logo.svg';
 import { useTheme } from 'styled-components';
 import { BackButton } from '../../components/BackButton';
+import { ModalPassword } from './components/modal';
+import { ForgetPassword } from './components/modal/styles';
 
 export const SignIn = ({ navigation }) => {
 	const [email, setEmail] = useState('');
@@ -44,63 +36,9 @@ export const SignIn = ({ navigation }) => {
 	const [isFocuedPassword, setIsFocuedPassword] = useState(false);
 
 	const [toogleModal, setToogleModal] = useState(false);
-	const { setUserAuth } = useAuthContext();
+	const { signInWithFirebase } = useAuthContext();
 	const { showSuccess, showError } = useGlobalContext();
 	const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-
-	const createUserOnFirebase = async () => {
-		// console.log('chamando');
-		const auth = getAuth();
-		createUserWithEmailAndPassword(auth, email, password)
-			.then((userCredential) => {
-				// Signed in
-				const user = userCredential.user;
-				console.log(user);
-				// ...
-			})
-			.catch((error) => {
-				const errorCode = error.code;
-				const errorMessage = error.message;
-				showError(errorMessage);
-				// ..
-			});
-	};
-
-	const signInWithFirebase = async () => {
-		const auth = getAuth();
-		signInWithEmailAndPassword(auth, email, password)
-			.then((userCredential) => {
-				// Signed in
-				const userInfo = userCredential.user;
-				const userLogged = {
-					id: userInfo.uid,
-					name: userInfo.providerData[0].displayName,
-					email: userInfo.email,
-					photo: userInfo.providerData[0].photoURL,
-				};
-				setUserAuth(userLogged);
-			})
-			.catch((error) => {
-				const errorCode = error.code;
-				const errorMessage = error.message;
-				showError(errorMessage);
-				console.log('errorCode', errorCode);
-			});
-	};
-
-	const forgotPassword = async () => {
-		const auth = getAuth();
-		sendPasswordResetEmail(auth, email)
-			.then(() => {
-				showSuccess('E-mail de redefinição de senha foi enviado para ' + email);
-			})
-			.catch((error) => {
-				const errorCode = error.code;
-				const errorMessage = error.message;
-				showError(errorMessage);
-				// ..
-			});
-	};
 
 	const openModal = () => {
 		setToogleModal(true);
@@ -128,14 +66,15 @@ export const SignIn = ({ navigation }) => {
 
 	return (
 		<>
-			<ScrollView contentContainerStyle={{}} showsVerticalScrollIndicator={false}>
-				<BackButton onPress={() => navigation.goBack()} />
+			<ScrollView style={{ backgroundColor: theme.colors.header }} showsVerticalScrollIndicator={false}>
 				<KeyboardAvoidingView behavior="position">
+					<BackButton onPress={() => navigation.goBack()} />
 					<Container>
+						<RoadContainer />
 						<Title>Estamos {'\n'}quase lá.</Title>
 						<SubTitle>
 							Faça seu login para começar{'\n'}
-							uma experiência incrível.
+							uma experiência incrível!
 						</SubTitle>
 						<Form>
 							{/* <LogoWrapper>
@@ -143,7 +82,6 @@ export const SignIn = ({ navigation }) => {
 					</LogoWrapper> */}
 
 							<InputWrapper>
-								{/* <Label>E-mail:</Label> */}
 								<EmailButton focused={isFocuedEmail || !!email} key={'email'} onPress={emailFocus} />
 								<Input
 									focused={isFocuedEmail}
@@ -159,13 +97,12 @@ export const SignIn = ({ navigation }) => {
 								/>
 							</InputWrapper>
 							<InputWrapper>
-								{/* <Label>Senha:</Label> */}
 								<PasswordButton focused={isFocuedPassword || !!password} key={'senha'} onPress={passwordFocus} />
 								<Input
 									focused={isFocuedPassword}
 									onBlur={removeFocusPassword}
 									onFocus={passwordFocus}
-									secureTextEntry={isPasswordVisible}
+									secureTextEntry={!isPasswordVisible}
 									placeholder="Senha"
 									value={password}
 									onChangeText={setPassword}
@@ -178,7 +115,7 @@ export const SignIn = ({ navigation }) => {
 									onPress={() => setIsPasswordVisible(!isPasswordVisible)}
 								/>
 							</InputWrapper>
-							<ButtonLink onPress={forgotPassword}>
+							<ButtonLink onPress={openModal}>
 								<LabelLink>Esqueci Senha</LabelLink>
 							</ButtonLink>
 							<ButtonContainer>
@@ -198,32 +135,7 @@ export const SignIn = ({ navigation }) => {
 					</Container>
 				</KeyboardAvoidingView>
 			</ScrollView>
-			<Modal
-				isVisible={toogleModal}
-				onBackdropPress={closeModal}
-				// backdropColor="white"
-				swipeDirection="down"
-				onSwipeComplete={closeModal}
-				onModalHide={closeModal}
-				animationIn="fadeInUp"
-				animationInTiming={500}
-				// backdropOpacity={0.9}
-				style={{
-					borderRadius: 20,
-				}}
-			>
-				<GestureHandlerRootView>
-					<ModalContainer>
-						<ModalContent>
-							<Text>Digite seu e-mail:</Text>
-							<TextInput placeholder="E-mail" value={email} onChangeText={setEmail} />
-							<Text>Digite seu e-mail:</Text>
-							<TextInput placeholder="Senha" value={password} onChangeText={setPassword} />
-							<Button title="Cadastrar" onPress={createUserOnFirebase} />
-						</ModalContent>
-					</ModalContainer>
-				</GestureHandlerRootView>
-			</Modal>
+			<ModalPassword isVisible={toogleModal} closeModal={closeModal} />
 		</>
 	);
 };

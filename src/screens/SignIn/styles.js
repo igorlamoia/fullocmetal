@@ -4,6 +4,8 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import { GestureHandlerRootView, RectButton } from 'react-native-gesture-handler';
 import { createElement } from 'react';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
+import Road from '../../assets/lottie/cars-road.json';
+import AnimatedLottieView from 'lottie-react-native';
 
 export const EmailButton = styled(RectButton).attrs(({ focused, filled, theme }) => {
 	return {
@@ -27,7 +29,7 @@ export const EmailButton = styled(RectButton).attrs(({ focused, filled, theme })
 export const PasswordShowButton = styled.Pressable.attrs(({ show, theme }) => ({
 	children: [
 		createElement(Feather, {
-			name: show ? 'eye' : 'eye-off',
+			name: !show ? 'eye' : 'eye-off',
 			size: 24,
 		}),
 		// createReactElement(Variavel, {attrs}, chlidren),
@@ -78,35 +80,22 @@ export const PasswordButton = styled(RectButton).attrs(({ theme, focused, filled
 			border-bottom-width: 2px;
 		`};
 `;
+export const RoadContainer = styled(AnimatedLottieView).attrs({
+	autoPlay: true,
+	loop: true,
+	source: Road,
+	// height: 150,
+	// width: 650,
+})`
+	opacity: 0.3;
+`;
 
 export const Container = styled(GestureHandlerRootView)`
-	/* flex: 1; */
-	margin-top: ${RFValue(100) + getStatusBarHeight()}px;
-	justify-content: space-around;
-	/* align-items: center; */
-	/* background-color: ${({ theme }) => theme.colors.shape_dark}; */
-	background-color: ${({ theme }) => theme.colors.background_primary};
 	padding: 0 24px;
+	padding-top: ${RFValue(100) + getStatusBarHeight()}px;
+	justify-content: space-around;
 `;
-export const ModalContainer = styled.View`
-	/* flex: 1; */
-	justify-content: center;
-	align-items: center;
-	background-color: ${({ theme }) => theme.colors.background_primary};
-	padding: 20px;
-	border-top-left-radius: 20px;
-	border-top-right-radius: 0px;
-	border-bottom-right-radius: 20px;
-`;
-export const ModalContent = styled.View`
-	/* flex: 1; */
-	width: 90%;
-	/* background-color: ${({ theme }) => theme.colors.background_secondary}; */
-	padding: 20px;
-	border-top-left-radius: 20px;
-	border-top-right-radius: 0px;
-	border-bottom-right-radius: 20px;
-`;
+
 export const Form = styled.View`
 	/* flex: 1; */
 	/* width: 90%; */
@@ -123,31 +112,27 @@ export const LogoWrapper = styled.View`
 	align-items: center;
 `;
 
-export const Label = styled.Text`
-	font-family: ${({ theme }) => theme.fonts.primary_500};
-	color: ${({ theme }) => theme.colors.text};
-	font-size: ${RFValue(15)}px;
-	/* text-align: center; */
-`;
-
 export const ButtonContainer = styled.View`
 	margin-top: ${RFValue(24)}px;
 `;
 
-export const LabelLink = styled(Label)`
+export const Title = styled.Text`
+	font-family: ${({ theme }) => theme.fonts.primary_500};
+	font-size: ${RFValue(30)}px;
+	color: ${({ theme }) => theme.colors.text_metal_logo};
+`;
+
+export const SubTitle = styled(Title)`
+	font-size: ${RFValue(15)}px;
+	margin-top: ${RFValue(16)}px;
+	color: ${({ theme }) => theme.colors.text_detail};
+`;
+
+export const LabelLink = styled(Title)`
 	margin-top: ${RFValue(10)}px;
 	color: ${({ theme }) => theme.colors.text_detail};
 	font-size: ${RFValue(13)}px;
 	/* text-align: center; */
-`;
-
-export const Title = styled(Label)`
-	font-size: ${RFValue(30)}px;
-	color: ${({ theme }) => theme.colors.title};
-`;
-export const SubTitle = styled(Label)`
-	margin-top: ${RFValue(16)}px;
-	color: ${({ theme }) => theme.colors.text_detail};
 `;
 
 export const ButtonLink = styled.Pressable`

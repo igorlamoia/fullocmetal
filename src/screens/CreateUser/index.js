@@ -12,11 +12,13 @@ import {
 	InputWrapper,
 	PasswordButton,
 	PasswordShowButton,
+	RoadContainer,
 	SubTitle,
 	Title,
 } from './styles';
 import { useGlobalContext } from '../../hooks/useGlobalVariables';
 import { BackButton } from '../../components/BackButton';
+import { useTheme } from 'styled-components';
 
 export const CreateUser = ({ navigation }) => {
 	const [email, setEmail] = useState('');
@@ -25,6 +27,7 @@ export const CreateUser = ({ navigation }) => {
 	const passwordRef = useRef(null);
 	const [isFocuedEmail, setIsFocuedEmail] = useState(false);
 	const [isFocuedPassword, setIsFocuedPassword] = useState(false);
+	const theme = useTheme();
 
 	const { showSuccess, showError } = useGlobalContext();
 	const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -64,11 +67,12 @@ export const CreateUser = ({ navigation }) => {
 
 	return (
 		<>
-			<BackButton onPress={() => navigation.goBack()} />
-			<ScrollView contentContainerStyle={{}} showsVerticalScrollIndicator={false}>
+			<ScrollView style={{ backgroundColor: theme.colors.header }} showsVerticalScrollIndicator={false}>
 				<KeyboardAvoidingView behavior="position">
+					<BackButton onPress={() => navigation.goBack()} />
 					<Container>
-						<Title>Crie sua {'\n'}conta</Title>
+						<RoadContainer />
+						<Title>Crie sua {'\n'}conta grátis :)</Title>
 						<SubTitle>
 							Faça seu cadastro de{'\n'}
 							forma rápida e fácil.
@@ -79,7 +83,6 @@ export const CreateUser = ({ navigation }) => {
 					</LogoWrapper> */}
 
 							<InputWrapper>
-								{/* <Label>E-mail:</Label> */}
 								<EmailButton focused={isFocuedEmail || !!email} key={'email'} onPress={emailFocus} />
 								<Input
 									focused={isFocuedEmail}
@@ -95,13 +98,12 @@ export const CreateUser = ({ navigation }) => {
 								/>
 							</InputWrapper>
 							<InputWrapper>
-								{/* <Label>Senha:</Label> */}
 								<PasswordButton focused={isFocuedPassword || !!password} key={'senha'} onPress={passwordFocus} />
 								<Input
 									focused={isFocuedPassword}
 									onBlur={removeFocusPassword}
 									onFocus={passwordFocus}
-									secureTextEntry={isPasswordVisible}
+									secureTextEntry={!isPasswordVisible}
 									placeholder="Senha"
 									value={password}
 									onChangeText={setPassword}

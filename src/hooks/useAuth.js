@@ -4,7 +4,7 @@ const { REDIRECT_URI } = process.env;
 import * as AuthSession from 'expo-auth-session';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useGlobalContext } from './useGlobalVariables';
-import { getAuth, signOut } from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 
 const AuthContext = createContext({});
 const USER_AUTH_DATA_KEY = '@fulloc-metal:user_id';
@@ -12,6 +12,32 @@ const USER_AUTH_DATA_KEY = '@fulloc-metal:user_id';
 export const AuthProvider = ({ children }) => {
 	const [userAuth, setUserAuth] = useState(false);
 	const { setIsLoading, showError } = useGlobalContext();
+
+	const signInWithFirebase = async () => {
+		setIsLoading(true);
+		const auth = getAuth();
+		signInWithEmailAndPassword(auth, email, password)
+			.then(async (userCredential) => {
+				// Signed in
+				const userInfo = userCredential.user;
+				const userLogged = {
+					id: userInfo.uid,
+					name: userInfo.providerData[0].displayName,
+					email: userInfo.email,
+					photo: userInfo.providerData[0].photoURL,
+				};
+				setUserAuth(userLogged);
+				await AsyncStorage.setItem(USER_AUTH_DATA_KEY, JSON.stringify(userLogged));
+				setIsLoading(false);
+			})
+			.catch((error) => {
+				setIsLoading(false);
+				const errorCode = error.code;
+				const errorMessage = error.message;
+				showError(errorMessage);
+				console.log('errorCode', errorCode);
+			});
+	};
 
 	const signInWithGoogle = async () => {
 		try {
@@ -97,6 +123,7 @@ export const AuthProvider = ({ children }) => {
 				userAuth,
 				LogOut,
 				setUserAuth,
+				signInWithFirebase,
 			}}
 		>
 			{children}
