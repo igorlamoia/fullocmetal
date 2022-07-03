@@ -119,7 +119,7 @@ export const SignIn = ({ navigation }) => {
 							</ButtonLink>
 							<ButtonContainer>
 								<ButtonWrapper>
-									<Button title="Entrar" onPress={() => signInWithFirebase(email, password)} />
+									<Button isLoading={isLoading} title="Entrar" onPress={() => signInWithFirebase(email, password)} />
 								</ButtonWrapper>
 								<ButtonWrapper>
 									<Button
@@ -127,7 +127,6 @@ export const SignIn = ({ navigation }) => {
 										title="Criar conta gratuita"
 										onPress={() => navigation.navigate('CreateUser')}
 										color={theme.colors.background_secondary}
-										isLoading={isLoading}
 									/>
 								</ButtonWrapper>
 							</ButtonContainer>

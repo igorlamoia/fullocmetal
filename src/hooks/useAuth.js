@@ -93,6 +93,8 @@ export const AuthProvider = ({ children }) => {
 				if (!userLogged.id) {
 					throw Error('Falha ao conectar com conta google, por favor, tente novamente!');
 				}
+				setIsLoading(false);
+
 				setUserAuth(userLogged);
 				await AsyncStorage.setItem(USER_AUTH_DATA_KEY, JSON.stringify(userLogged));
 			}

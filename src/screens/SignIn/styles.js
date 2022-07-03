@@ -144,7 +144,7 @@ export const Input = styled.TextInput`
 	height: 100%;
 	color: ${({ theme }) => theme.colors.title};
 	background-color: ${({ theme }) => theme.colors.background_secondary};
-	font-size: ${RFValue(15)}px;
+	font-size: ${RFValue(13)}px;
 	padding: 0 35px;
 	${({ focused }) =>
 		focused &&

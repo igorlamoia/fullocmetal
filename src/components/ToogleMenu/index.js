@@ -1,6 +1,7 @@
 import React from 'react';
 import Animated, { interpolate, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { BorderlessButton } from 'react-native-gesture-handler';
+import PeoplePadrao from '../../assets/user-padrao.png';
 
 import { Close, Logout, ProfileImage, ToogleWrapper } from './styles';
 import { useAuthContext } from '../../hooks/useAuth';
@@ -42,7 +43,7 @@ export const ToogleMenu = () => {
 					</BorderlessButton>
 				</Animated.View>
 				<BorderlessButton onPress={handleProfileOptions}>
-					<ProfileImage source={{ uri: userAuth.photo }} />
+					<ProfileImage source={!!userAuth.photo ? { uri: userAuth.photo } : PeoplePadrao} />
 				</BorderlessButton>
 				{/* <Animated.View style={closeOptionStyle}>
 					<BorderlessButton onPress={handleProfileOptions}>

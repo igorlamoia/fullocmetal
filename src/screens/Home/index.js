@@ -24,9 +24,9 @@ import { useGlobalContext } from '../../hooks/useGlobalVariables';
 
 export const Home = () => {
 	const navigation = useNavigation();
-	const { setFullocModal, setIsLoading, isLoading, showError } = useGlobalContext();
+	const { setFullocModal, showError } = useGlobalContext();
 	const [data, setData] = useState([]);
-	// const [isLoading, setIsLoading] = useState(true);
+	const [isLoading, setIsLoading] = useState(true);
 
 	const fetchData = async () => {
 		try {
