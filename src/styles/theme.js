@@ -14,6 +14,7 @@ export default {
 
 		main: '#CE0000',
 		main_light: '#fdedef',
+		disabled: '#fe8f8f',
 
 		success: '#03b252',
 		error: '#f44336',

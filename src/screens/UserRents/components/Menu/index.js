@@ -49,7 +49,7 @@ const MenuCarRented = ({ item }) => {
 			setIsLoading(false);
 		} catch (erro) {
 			setIsLoading(false);
-			console.log(erro);
+			// console.log(erro);
 		}
 	};
 

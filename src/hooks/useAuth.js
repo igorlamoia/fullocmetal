@@ -5,6 +5,15 @@ import * as AuthSession from 'expo-auth-session';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useGlobalContext } from './useGlobalVariables';
 import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import * as Yup from 'yup';
+
+let schemaValidationForm = Yup.object().shape({
+	email: Yup.string().email('E-mail inválido :(').required('E-mail vazio -_- ai fica difícil kkkk'),
+	password: Yup.string()
+		.required('Senha é obrigatória!')
+		.min(6, 'A senha deve ter no mínimo 6 caracteres')
+		.max(16, 'A senha deve ter no máximo 16 caracteres'),
+});
 
 const AuthContext = createContext({});
 const USER_AUTH_DATA_KEY = '@fulloc-metal:user_id';
@@ -13,30 +22,45 @@ export const AuthProvider = ({ children }) => {
 	const [userAuth, setUserAuth] = useState(false);
 	const { setIsLoading, showError } = useGlobalContext();
 
-	const signInWithFirebase = async () => {
-		setIsLoading(true);
-		const auth = getAuth();
-		signInWithEmailAndPassword(auth, email, password)
-			.then(async (userCredential) => {
-				// Signed in
-				const userInfo = userCredential.user;
-				const userLogged = {
-					id: userInfo.uid,
-					name: userInfo.providerData[0].displayName,
-					email: userInfo.email,
-					photo: userInfo.providerData[0].photoURL,
-				};
-				setUserAuth(userLogged);
-				await AsyncStorage.setItem(USER_AUTH_DATA_KEY, JSON.stringify(userLogged));
-				setIsLoading(false);
-			})
-			.catch((error) => {
-				setIsLoading(false);
-				const errorCode = error.code;
-				const errorMessage = error.message;
-				showError(errorMessage);
-				console.log('errorCode', errorCode);
-			});
+	const signInWithFirebase = async (email, password) => {
+		try {
+			setIsLoading(true);
+			await schemaValidationForm.validate({ email, password });
+			const auth = getAuth();
+			signInWithEmailAndPassword(auth, email, password)
+				.then(async (userCredential) => {
+					// Signed in
+					const userInfo = userCredential.user;
+					const userLogged = {
+						id: userInfo.uid,
+						name: userInfo.providerData[0].displayName,
+						email: userInfo.email,
+						photo: userInfo.providerData[0].photoURL,
+					};
+					setUserAuth(userLogged);
+					await AsyncStorage.setItem(USER_AUTH_DATA_KEY, JSON.stringify(userLogged));
+					setIsLoading(false);
+				})
+				.catch((error) => {
+					setIsLoading(false);
+					const errorCode = error.code;
+					if (errorCode === 'auth/user-not-found') {
+						showError('Usuário não encontrado, por favor, crie sua conta gratuitamente');
+					}
+					if (errorCode === 'auth/wrong-password') {
+						showError('Dados inválidos');
+					}
+					// console.log('errorCode', errorCode);
+					const errorMessage = error.message;
+					showError(errorMessage.message);
+				});
+		} catch (error) {
+			setIsLoading(false);
+
+			if (error.name === 'ValidationError') {
+				return showError(error.message);
+			}
+		}
 	};
 
 	const signInWithGoogle = async () => {
@@ -88,7 +112,7 @@ export const AuthProvider = ({ children }) => {
 				return setUserAuth(user_data);
 			}
 		} catch (erro) {
-			console.log(erro);
+			// console.log(erro);
 		} finally {
 			setIsLoading(false);
 		}

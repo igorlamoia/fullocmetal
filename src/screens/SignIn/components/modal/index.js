@@ -1,49 +1,66 @@
 import React, { useRef, useState } from 'react';
-import { ScrollView, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Button } from '../../../../components/Button';
 import { EmailButton, Input, InputWrapper } from '../../styles';
-import { ForgetPassword, ModalContainer, ModalContent, SubTitle, Title, ButtonWrapper } from './styles';
+import { ForgetPassword, ModalContainer, ModalContent, SubTitle, Title, ButtonWrapper, ButtonModal } from './styles';
 import Modal from 'react-native-modal';
-import { sendPasswordResetEmail } from 'firebase/auth';
+import { getAuth, sendPasswordResetEmail } from 'firebase/auth';
+import * as Yup from 'yup';
+import { useGlobalContext } from '../../../../hooks/useGlobalVariables';
+import { Keyboard, TouchableWithoutFeedback } from 'react-native';
 
 // import { Container } from './styles';
 
+let schemaModalValidation = Yup.object().shape({
+	email: Yup.string().email('E-mail inválido :(').required('E-mail vazio -_- ai fica difícil kkkk'),
+});
+
 export const ModalPassword = ({ isVisible, closeModal }) => {
+	const [isLoading, setIsLoading] = useState(false);
 	const [email, setEmail] = useState('');
 	const emailRef = useRef(null);
-	const [password, setPassword] = useState('');
-	const passwordRef = useRef(null);
 	const [isFocuedEmail, setIsFocuedEmail] = useState(false);
-	const [isFocuedPassword, setIsFocuedPassword] = useState(false);
+	const { showError, showSuccess } = useGlobalContext();
 
 	const emailFocus = () => {
 		emailRef?.current?.focus();
 		setIsFocuedEmail(true);
 	};
-	const passwordFocus = () => {
-		passwordRef?.current?.focus();
-		setIsFocuedPassword(true);
-	};
+
 	const removeFocusEmail = () => {
 		setIsFocuedEmail(false);
 	};
-	const removeFocusPassword = () => {
-		setIsFocuedPassword(false);
-	};
 
 	const forgotPassword = async () => {
-		const auth = getAuth();
-		sendPasswordResetEmail(auth, email)
-			.then(() => {
-				showSuccess('E-mail de redefinição de senha foi enviado para ' + email);
-			})
-			.catch((error) => {
-				const errorCode = error.code;
-				const errorMessage = error.message;
-				showError(errorMessage);
-				// ..
-			});
+		try {
+			Keyboard.dismiss();
+			setIsLoading(true);
+			await schemaModalValidation.validate({ email });
+			const auth = getAuth();
+			sendPasswordResetEmail(auth, email)
+				.then(() => {
+					setIsLoading(false);
+					setEmail('');
+					showSuccess('E-mail de redefinição de senha foi enviado para ' + email);
+				})
+				.catch((error) => {
+					// console.log(error);
+					setIsLoading(false);
+					// console.log(error.code);
+					if (error.code === 'auth/user-not-found') {
+						return showError('E-mail não cadastrado!');
+					}
+					showError('Erro inesperado :(');
+					// ..
+				});
+		} catch (error) {
+			setIsLoading(false);
+			// console.log(error);
+			if (error.name === 'ValidationError') {
+				return showError(error.message);
+			}
+			// error.type === 'ValidationError'
+		}
 	};
 
 	return (
@@ -57,41 +74,36 @@ export const ModalPassword = ({ isVisible, closeModal }) => {
 			animationIn="fadeInUp"
 			animationInTiming={500}
 			// backdropOpacity={0.9}
-			style={{
-				borderRadius: 20,
-			}}
 		>
-			<GestureHandlerRootView>
-				<ScrollView showsVerticalScrollIndicator={false}>
-					<ModalContainer>
-						<ModalContent>
-							<Title>Esqueceu?</Title>
-							<ForgetPassword />
-							<Title>Não tem problema!</Title>
-							<SubTitle>Digite seu e-mail abaixo {'\n'}para redefir a senha</SubTitle>
-							<InputWrapper>
-								{/* <Label>E-mail:</Label> */}
-								<EmailButton focused={isFocuedEmail || !!email} key={'email'} onPress={emailFocus} />
-								<Input
-									focused={isFocuedEmail}
-									onBlur={removeFocusEmail}
-									onFocus={emailFocus}
-									placeholder="E-mail"
-									keyboardType="email-address"
-									value={email}
-									autoCorrect={false}
-									autoCapitalize="none"
-									onChangeText={setEmail}
-									ref={emailRef}
-								/>
-							</InputWrapper>
-							<ButtonWrapper>
-								<Button title="Redefinir" onPress={forgotPassword} />
-							</ButtonWrapper>
-						</ModalContent>
-					</ModalContainer>
-				</ScrollView>
-			</GestureHandlerRootView>
+			<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+				<ModalContainer>
+					<ModalContent>
+						<Title>Esqueceu?</Title>
+						<ForgetPassword />
+						<Title>Não tem problema!</Title>
+						<SubTitle>Digite seu e-mail abaixo {'\n'}para redefir a senha</SubTitle>
+						<InputWrapper>
+							<EmailButton focused={isFocuedEmail || !!email} key={'email'} onPress={emailFocus} />
+							<Input
+								focused={isFocuedEmail}
+								onBlur={removeFocusEmail}
+								onFocus={emailFocus}
+								placeholder="E-mail"
+								keyboardType="email-address"
+								value={email}
+								autoCorrect={false}
+								autoCapitalize="none"
+								onChangeText={setEmail}
+								ref={emailRef}
+								onSubmitEditing={forgotPassword}
+							/>
+						</InputWrapper>
+						<ButtonWrapper>
+							<ButtonModal enabled={!isLoading} title="Redefinir Senha" onPress={forgotPassword}></ButtonModal>
+						</ButtonWrapper>
+					</ModalContent>
+				</ModalContainer>
+			</TouchableWithoutFeedback>
 		</Modal>
 	);
 };

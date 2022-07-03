@@ -7,7 +7,7 @@ import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import Road from '../../assets/lottie/cars-road.json';
 import AnimatedLottieView from 'lottie-react-native';
 
-export const EmailButton = styled(RectButton).attrs(({ focused, filled, theme }) => {
+export const EmailButton = styled.Pressable.attrs(({ focused, filled, theme }) => {
 	return {
 		children: [
 			createElement(MaterialCommunityIcons, {

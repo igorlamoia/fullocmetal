@@ -2,6 +2,7 @@ import styled from 'styled-components/native';
 import Forget from '../../../../assets/lottie/forgot.json';
 import LottieView from 'lottie-react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
+import { createElement } from 'react';
 
 export const Title = styled.Text`
 	font-family: ${({ theme }) => theme.fonts.primary_500};
@@ -50,4 +51,23 @@ export const ModalContent = styled.View`
 `;
 export const ButtonWrapper = styled.View`
 	margin-top: 20px;
+`;
+
+const TitleButton = styled.Text`
+	font-family: ${({ theme }) => theme.fonts.primary_500};
+	color: ${({ theme, enabled }) => (enabled ? theme.colors.background_primary : theme.colors.header)};
+	font-size: ${RFValue(15)}px;
+	text-align: center;
+`;
+
+export const ButtonModal = styled.Pressable.attrs(({ title, enabled }) => ({
+	children: [createElement(TitleButton, { enabled }, title)], //component, attrs, children
+}))`
+	width: 100%;
+	padding: 0 ${RFValue(10)}px;
+	height: ${RFValue(56)}px;
+	align-items: center;
+	justify-content: center;
+	/* opacity: ${({ enabled = false }) => (enabled ? 1 : 0.4)}; */
+	background-color: ${({ theme, enabled }) => (enabled ? theme.colors.main : theme.colors.disabled)};
 `;

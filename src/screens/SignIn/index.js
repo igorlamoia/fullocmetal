@@ -25,7 +25,6 @@ import Logo from '../../assets/logo.svg';
 import { useTheme } from 'styled-components';
 import { BackButton } from '../../components/BackButton';
 import { ModalPassword } from './components/modal';
-import { ForgetPassword } from './components/modal/styles';
 
 export const SignIn = ({ navigation }) => {
 	const [email, setEmail] = useState('');
@@ -37,7 +36,7 @@ export const SignIn = ({ navigation }) => {
 
 	const [toogleModal, setToogleModal] = useState(false);
 	const { signInWithFirebase } = useAuthContext();
-	const { showSuccess, showError } = useGlobalContext();
+	const { showSuccess, showError, isLoading } = useGlobalContext();
 	const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
 	const openModal = () => {
@@ -120,7 +119,7 @@ export const SignIn = ({ navigation }) => {
 							</ButtonLink>
 							<ButtonContainer>
 								<ButtonWrapper>
-									<Button title="Entrar" onPress={signInWithFirebase} />
+									<Button title="Entrar" onPress={() => signInWithFirebase(email, password)} />
 								</ButtonWrapper>
 								<ButtonWrapper>
 									<Button
@@ -128,6 +127,7 @@ export const SignIn = ({ navigation }) => {
 										title="Criar conta gratuita"
 										onPress={() => navigation.navigate('CreateUser')}
 										color={theme.colors.background_secondary}
+										isLoading={isLoading}
 									/>
 								</ButtonWrapper>
 							</ButtonContainer>
